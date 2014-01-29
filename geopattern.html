@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Geopatterns!</title>
+	<style>
+		div {
+			/*background-color: rgb(57, 82, 147);*/
+			width: 500px;
+			height: 300px;
+		}
+	</style>
+</head>
+<body>
+	<div class="js-geopattern"></div>
+	<input type="text" id="string" value="Facebook" />
+	<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/sha1.js"></script>
+	<script src="jquery.js"></script>
+	<script src="snap.svg-min.js"></script>
+	<script src="geopattern.js"></script>
+	<script>
+		$('#string').on('keyup', function () {
+			var sha = CryptoJS.SHA1(this.value).toString();
+			$('.js-geopattern').replaceWith(
+				$('<div>')
+					.addClass('js-geopattern')
+					.attr('data-title-sha', sha)
+					.geopattern()
+			);
+		});
+		$('#string').trigger('keyup');
+	</script>
+</body>
+</html>
