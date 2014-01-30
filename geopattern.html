@@ -14,16 +14,18 @@
 	<script src="snap.svg-min.js"></script>
 	<script src="geopattern.js"></script>
 	<script>
-		$('#string').on('keyup', function () {
-			var sha = CryptoJS.SHA1(this.value).toString();
-			$('.js-geopattern').replaceWith(
-				$('<div>')
-					.addClass('js-geopattern')
-					.attr('data-title-sha', sha)
-					.geopattern()
-			);
-		});
-		$('#string').trigger('keyup').focus();
+		$('#string')
+			.on('keyup', function () {
+				var sha = CryptoJS.SHA1(this.value).toString();
+				$('.js-geopattern').replaceWith(
+					$('<div>')
+						.addClass('js-geopattern')
+						.attr('data-title-sha', sha)
+						.geopattern()
+				);
+			})
+			.trigger('keyup')
+			.focus();
 	</script>
 </body>
 </html>
