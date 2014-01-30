@@ -3,7 +3,7 @@
     $.fn.geopattern = function(options) {
       return this.each(function() {
         var container = $(this);
-        var sha       = $(this).data('title-sha');
+        var sha       = $(this).attr('data-title-sha');
         var s         = getSnap();
 
         setBGColor(s, sha, container);

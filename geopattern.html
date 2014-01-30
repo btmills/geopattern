@@ -17,12 +17,9 @@
 		$('#string')
 			.on('keyup', function () {
 				var sha = CryptoJS.SHA1(this.value).toString();
-				$('.js-geopattern').replaceWith(
-					$('<div>')
-						.addClass('js-geopattern')
-						.attr('data-title-sha', sha)
-						.geopattern()
-				);
+				$('.js-geopattern')
+					.attr('data-title-sha', sha)
+					.geopattern();
 			})
 			.trigger('keyup')
 			.focus();
