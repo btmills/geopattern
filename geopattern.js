@@ -23,7 +23,7 @@ $.fn.geopattern = function(options) {
 			case 4:
 				geoSineWaves(s, sha); break;
 			case 5:
-				break;
+				geoPlusSigns(s, sha); break;
 			case 6:
 				break;
 			case 7:
@@ -96,7 +96,7 @@ $.fn.geopattern = function(options) {
 				var dy      = x % 2 == 0 ? y*hexHeight : y*hexHeight + hexHeight/2;
 				var opacity = map(val, 0, 15, 0.02, 0.18);
 				var fill    = (val % 2 == 0) ? "#ddd" : "#222";
-				tmpHex = hex.clone();
+				var tmpHex = hex.clone();
 				tmpHex.attr({
 					opacity: opacity,
 					fill: fill,
@@ -173,6 +173,71 @@ $.fn.geopattern = function(options) {
 		};
 	}
 
+	function geoPlusSigns(s, sha) {
+		var squareSize = parseInt(sha.substr(0, 1), 16);
+		squareSize     = map(squareSize, 0, 15, 10, 25)
+		var plusSize   = squareSize * 3;
+		var plusShape  = createPlus(s, squareSize);
+
+		s.node.setAttribute('width', squareSize * 12);
+		s.node.setAttribute('height', squareSize * 12);
+
+		var i = 0;
+		for (var y = 0; y < 6; y++) {
+			for (var x = 0; x < 6; x++) {
+				var val     = parseInt(sha.substr(i, 1), 16);
+				var opacity = map(val, 0, 15, 0.02, 0.15);
+				var fill    = (val % 2 === 0) ? "#ddd" : "#222";
+				var dx      = (y % 2 === 0) ? 0 : 1;
+
+				// opacity = 1 if x === 0
+
+				var plusTmp = plusShape.clone();
+				plusTmp.attr({
+					fill: fill,
+					opacity: opacity,
+					transform: "t"+[x*plusSize - x*squareSize + dx*squareSize - squareSize,
+						y*plusSize - y*squareSize - plusSize/2]
+				});
+
+				// Add an extra column on the right for tiling.
+				if (x === 0) {
+					plusTmp = plusShape.clone();
+					plusTmp.attr({
+						fill: fill,
+						opacity: opacity,
+						transform: "t"+[4*plusSize - x*squareSize + dx*squareSize - squareSize,
+							y*plusSize - y*squareSize - plusSize/2]
+					});
+				}
+
+				// Add an extra row on the bottom that matches the first row, for tiling
+				if (y === 0) {
+					plusTmp = plusShape.clone();
+					plusTmp.attr({
+						fill: fill,
+						opacity: opacity,
+						transform: "t"+[x*plusSize - x*squareSize + dx*squareSize - squareSize,
+							4*plusSize - y*squareSize - plusSize/2]
+					});
+				}
+
+				// Add an extra one at top-right and bottom-right, for tiling
+				if (x === 0 && y === 0) {
+					plusTmp = plusShape.clone();
+					plusTmp.attr({
+						fill: fill,
+						opacity: opacity,
+						transform: "t"+[4*plusSize - x*squareSize + dx*squareSize - squareSize,
+							4*plusSize - y*squareSize - plusSize/2]
+					});
+				}
+
+				i++;
+			}
+		}
+	}
+
 	function geoXes(s, sha) {
 		var squareSize = parseInt(sha.substr(0, 1), 16);
 		squareSize     = map(squareSize, 0, 15, 10, 25);
@@ -189,6 +254,7 @@ $.fn.geopattern = function(options) {
 				var opacity = map(val, 0, 15, 0.02, 0.15);
 				var dy      = x % 2 == 0 ? y*xSize - xSize*0.5 : y*xSize - xSize*0.5 + xSize/4;
 				var fill    = (val % 2 == 0) ? "#ddd" : "#222";
+
 				var xTmp    = xShape.clone();
 				xTmp.attr({
 					fill: fill,
@@ -196,9 +262,10 @@ $.fn.geopattern = function(options) {
 					transform: "t"+[x*xSize/2 - xSize/2,dy - y*xSize/2]+
 						"r45,"+squareSize*1.5+","+squareSize*1.5
 				});
+
 				// Add an extra one at top-right, for tiling.
 				if (x == 0) {
-					var xTmp = xShape.clone();
+					xTmp = xShape.clone();
 					xTmp.attr({
 						fill: fill,
 						opacity: opacity,
@@ -209,8 +276,8 @@ $.fn.geopattern = function(options) {
 
 				// // Add an extra row at the end that matches the first row, for tiling.
 				if (y == 0) {
-					var dy = x % 2 == 0 ? 6*xSize - xSize/2 : 6*xSize - xSize/2 + xSize/4;
-					var xTmp = xShape.clone();
+					dy = x % 2 == 0 ? 6*xSize - xSize/2 : 6*xSize - xSize/2 + xSize/4;
+					xTmp = xShape.clone();
 					xTmp.attr({
 						fill: fill,
 						opacity: opacity,
@@ -221,7 +288,7 @@ $.fn.geopattern = function(options) {
 
 				// // // Add an extra one at bottom-right, for tiling.
 				if (x == 0 && y == 0) {
-					var xTmp = xShape.clone();
+					xTmp = xShape.clone();
 					xTmp.attr({
 						fill: fill,
 						opacity: opacity,
@@ -376,9 +443,9 @@ $.fn.geopattern = function(options) {
 	}
 
 	function createHexagon(s, sideLength) {
-		c = sideLength;
-		a = c/2;
-		b = Math.sin(Snap.rad(60))*c;
+		var c = sideLength;
+		var a = c/2;
+		var b = Math.sin(Snap.rad(60))*c;
 		return s.polyline(0, b, a, 0, a+c, 0, 2*c, b, a+c, 2*b, a, 2*b, 0, b);
 	}
 
