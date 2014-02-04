@@ -25,7 +25,7 @@ $.fn.geopattern = function(options) {
 			case 5:
 				geoPlusSigns(s, sha); break;
 			case 6:
-				break;
+				geoOverlappingRings(s, sha); break;
 			case 7:
 				break;
 			case 8:
@@ -396,6 +396,49 @@ $.fn.geopattern = function(options) {
 				i++;
 			};
 		};
+	}
+
+	function geoOverlappingRings(s, sha) {
+		var scale       = parseInt(sha.substr(1, 1), 16);
+		var ringSize    = map(scale, 0, 15, 5, 80);
+		var strokeWidth = ringSize / 4;
+
+		s.node.setAttribute('width', ringSize * 6);
+		s.node.setAttribute('height', ringSize * 6);
+
+		var i = 0;
+		for (var y = 0; y < 6; y++) {
+			for (var x = 0; x < 6; x++) {
+				var attr = {
+					fill: "none",
+					stroke: "#000",
+					strokeWidth: strokeWidth,
+					opacity: map(parseInt(sha.substr(i, 1), 16), 0, 15, 0.02, 0.16)
+				};
+
+				var circle = s.circle(x * ringSize, y * ringSize, ringSize);
+				circle.attr(attr);
+
+				// Add an extra one at top-right, for tiling.
+				if (x === 0) {
+					circle = s.circle(6 * ringSize, y * ringSize, ringSize);
+					circle.attr(attr);
+				}
+
+				// Add an extra row at the end that matches the first row, for tiling.
+				if (y === 0) {
+					circle = s.circle(x * ringSize, 6 * ringSize, ringSize);
+					circle.attr(attr);
+				}
+
+				// Add an extra one at bottom-right, for tiling.
+				if (x === 0 && y === 0) {
+					circle = s.circle(6 * ringSize, 6 * ringSize, ringSize);
+					circle.attr(attr);
+				}
+				i++;
+			}
+		}
 	}
 
 	function geoTriangles(s, sha) {
