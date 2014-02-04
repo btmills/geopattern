@@ -27,7 +27,7 @@ $.fn.geopattern = function(options) {
 			case 6:
 				geoOverlappingRings(s, sha); break;
 			case 7:
-				break;
+				geoPlaid(s, sha); break;
 			case 8:
 				break;
 			case 9:
@@ -483,6 +483,49 @@ $.fn.geopattern = function(options) {
 				i++;
 			};
 		};
+	}
+
+	function geoPlaid(s, sha) {
+		var height = 0;
+		var width = 0;
+		var fill, i, opacity, space, square, stripeHeight, stripeWidth, val, x, y;
+
+		// Horizontal stripes
+		i = 0;
+		for (y = 0; y < 18; y++) {
+			space = parseInt(sha.substr(i, 1), 16);
+			height += space + 5;
+			val = parseInt(sha.substr(i + 1, 1), 16);
+			opacity = map(val, 0, 15, 0.02, 0.15);
+			fill = (val % 2 === 0) ? "#ddd" : "#222";
+			stripeHeight = val + 5;
+
+			s.rect(0, height, "100%", stripeHeight).attr({
+				opacity: opacity,
+				fill: fill
+			});
+			height += stripeHeight;
+			i += 2;
+		}
+
+		i = 0;
+		for (x = 0; x < 18; x++) {
+			space = parseInt(sha.substr(i, 1), 16);
+			width += space + 5;
+			val = parseInt(sha.substr(i + 1, 1), 16);
+			opacity = map(val, 0, 15, 0.02, 0.15);
+			fill = (val % 2 === 0) ? "#ddd" : "#222";
+			stripeWidth = val + 5;
+			s.rect(width, 0, stripeWidth, "100%").attr({
+				fill: fill,
+				opacity: opacity
+			});
+			width += stripeWidth;
+			i += 2;
+		}
+
+		s.node.setAttribute('width', width);
+		s.node.setAttribute('height', height);
 	}
 
 	function createHexagon(s, sideLength) {
