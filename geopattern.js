@@ -70,6 +70,10 @@ $.fn.geopattern = function(options) {
 		return s.polyline(halfWidth, 0, sideLength, height, 0, height, halfWidth, 0);
 	}
 
+	function createDiamond(s, width, height) {
+		return s.polyline(width / 2, 0, width, height / 2, width / 2, height, 0, height / 2);
+	}
+
 	function renderPattern(s, container) {
 		var b64 = 'data:image/svg+xml;base64,' + window.btoa(s.toString());
 		var url = 'url("' + b64 + '")';
@@ -567,6 +571,74 @@ $.fn.geopattern = function(options) {
 		}
 	}
 
+	function geoDiamonds(s, sha) {
+		var diamondWidth  = map(parseInt(sha.substr(0, 1), 16), 0, 15, 10, 50);
+		var diamondHeight = map(parseInt(sha.substr(1, 1), 16), 0, 15, 10, 50);
+		var dx, fill, i, opacity, val, x, y;
+
+		s.node.setAttribute('width', diamondWidth * 6);
+		s.node.setAttribute('height', diamondHeight * 3);
+
+		i = 0;
+		for (y = 0; y < 6; y++) {
+			for (x = 0; x < 6; x++) {
+				val        = parseInt(sha.substr(i, 1), 16);
+				opacity    = map(val, 0, 15, 0.02, 0.15);
+				fill       = (val % 2 === 0) ? '#ddd' : '#222';
+				dx         = (y % 2 === 0) ? 0 : diamondWidth / 2;
+
+				createDiamond(s, diamondWidth, diamondHeight).attr({
+					opacity: opacity,
+					fill: fill,
+					stroke: '#444',
+					transform: 't' + [
+						x * diamondWidth - diamondWidth / 2 + dx,
+						diamondHeight / 2 * y - diamondHeight / 2
+					]
+				});
+
+				// Add an extra one at top-right, for tiling.
+				if (x === 0) {
+					createDiamond(s, diamondWidth, diamondHeight).attr({
+						opacity: opacity,
+						fill: fill,
+						transform: 't' + [
+							6 * diamondWidth - diamondWidth / 2 + dx,
+							diamondHeight / 2 * y - diamondHeight / 2
+						]
+					});
+				}
+
+				// Add an extra row at the end that matches the first row, for tiling.
+				if (y === 0) {
+					createDiamond(s, diamondWidth, diamondHeight).attr({
+						opacity: opacity,
+						fill: fill,
+						transform: 't' + [
+							x * diamondWidth - diamondWidth / 2 + dx,
+							diamondHeight / 2 * 6 - diamondHeight / 2
+						]
+					});
+				}
+
+				// Add an extra one at bottom-right, for tiling.
+				if (x === 0 && y === 0) {
+					createDiamond(s, diamondWidth, diamondHeight).attr({
+						opacity: opacity,
+						fill: fill,
+						transform: 't' + [
+							6 * diamondWidth - diamondWidth / 2 + dx,
+							diamondHeight / 2 * 6 - diamondHeight / 2
+						]
+					});
+				}
+
+				i += 1;
+			}
+		}
+	}
+
+
 	function geoPlaid(s, sha) {
 		var height = 0;
 		var width = 0;
@@ -620,29 +692,29 @@ $.fn.geopattern = function(options) {
 
 		switch (pattern) {
 			case 0:
-				geoTriangles(s, sha); break;
+				geoBricks(s, sha); break;
 			case 1:
 				geoOverlappingCircles(s, sha); break;
 			case 2:
-				geoHexagons(s, sha); break;
+				geoPlusSigns(s, sha); break;
 			case 3:
 				geoXes(s, sha); break;
 			case 4:
 				geoSineWaves(s, sha); break;
 			case 5:
-				geoPlusSigns(s, sha); break;
+				geoHexagons(s, sha); break;
 			case 6:
 				geoOverlappingRings(s, sha); break;
 			case 7:
 				geoPlaid(s, sha); break;
 			case 8:
-				geoBricks(s, sha); break;
+				geoTriangles(s, sha); break;
 			case 9:
 				geoSquares(s, sha); break;
 			case 10:
 				geoRings(s, sha); break;
 			case 11:
-				break;
+				geoDiamonds(s, sha); break;
 			case 12:
 				break;
 			case 13:
