@@ -1,0 +1,21 @@
+{
+	"env": {
+		"browser": true
+	},
+	"rules": {
+		"no-bitwise": 2,
+		"no-div-regex": 2,
+		"no-else-return": 2,
+		"no-eq-null": 2,
+		"no-floating-decimal": 2,
+		"no-nested-ternary": 2,
+		"no-self-compare": 2,
+
+		"brace-style": 2,
+		"guard-for-in": 2,
+		"quotes": [2, "single"],
+		"radix": 2,
+		"sort-vars": 2,
+		"space-unary-word-ops": 2
+	}
+}
