@@ -377,6 +377,53 @@ $.fn.geopattern = function(options) {
 		}
 	}
 
+	function geoBricks(s, sha) {
+		var squareSize = map(parseInt(sha.substr(0, 1), 16), 0, 15, 6, 60);
+		var brickWidth = squareSize * 2;
+		var gapSize    = squareSize * 0.1;
+		var attr, dx, fill, i, opacity, val, x, y;
+
+		s.node.setAttribute('width', (brickWidth + gapSize) * 6);
+		s.node.setAttribute('height', (squareSize + gapSize) * 6);
+
+		i = 0;
+		for (y = 0; y < 6; y++) {
+			for (x = 0; x < 6; x++) {
+				val     = parseInt(sha.substr(i, 1), 16);
+				opacity = map(val, 0, 15, 0.02, 0.2);
+				fill    = (val % 2 === 0) ? '#ddd' : '#222';
+				dx      = (y % 2 === 0) ? -squareSize : 0;
+				attr    = { fill: fill, stroke: '#000', opacity: opacity };
+
+				s.rect(x * (brickWidth + gapSize) + dx,
+					y * (squareSize + gapSize),
+					brickWidth,
+					squareSize
+				).attr(attr);
+
+				// Add an extra one at top-right, for tiling
+				if (x === 0) {
+					s.rect(6 * (brickWidth + gapSize) + dx,
+						y * (squareSize + gapSize),
+						brickWidth,
+						squareSize
+					).attr(attr);
+				}
+
+				// Add an extra one at bottom-right, for tiling
+				if (y === 0) {
+					s.rect(6 * (brickWidth + gapSize) + dx,
+						6 * (squareSize + gapSize),
+						brickWidth,
+						squareSize
+					).attr(attr);
+				}
+
+				i += 1;
+			}
+		}
+	}
+
 	function geoSquares(s, sha) {
 		var squareSize = map(parseInt(sha.substr(0, 1), 16), 0, 15, 10, 70);
 		var i, square, val, x, y;
@@ -589,7 +636,7 @@ $.fn.geopattern = function(options) {
 			case 7:
 				geoPlaid(s, sha); break;
 			case 8:
-				break;
+				geoBricks(s, sha); break;
 			case 9:
 				geoSquares(s, sha); break;
 			case 10:
