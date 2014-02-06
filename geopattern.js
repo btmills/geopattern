@@ -19,6 +19,16 @@ $.fn.geopattern = function(options) {
 		return snap;
 	}
 
+	/**
+	 * Extract a substring from a hex string and parse it as an integer
+	 * @param {string} sha - Source hex string
+	 * @param {number} index - Start index of substring
+	 * @param {number} [length] - Length of substring. Defaults to 1.
+	 */
+	function hexVal(sha, index, len) {
+		return parseInt(sha.substr(index, len || 1), 16);
+	}
+
 	function map(value, vMin, vMax, dMin, dMax) {
 		var vValue = parseFloat(value);
 		var vRange = vMax - vMin;
@@ -27,9 +37,20 @@ $.fn.geopattern = function(options) {
 		return (vValue - vMin) * dRange / vRange + dMin;
 	}
 
+	/**
+	 * Set a pattern's dimensions
+	 * @param {Snap} s - Snap.svg instance
+	 * @param {number} width - Pattern width in pixels
+	 * @param {number} [height] - Pattern height in pixels. Defaults to width.
+	 */
+	function setDimensions(s, width, height) {
+		s.node.setAttribute('width', width);
+		s.node.setAttribute('height', height || width);
+	}
+
 	function setBGColor(s, sha, container) {
-		var hueOffset       = parseInt(sha.substr(14, 3), 16);
-		var satOffset       = parseInt(sha.substr(17, 1), 16) / 100;
+		var hueOffset       = hexVal(sha, 14, 3);
+		var satOffset       = hexVal(sha, 17) / 100;
 		var bgRGB           = Snap.getRGB('#933c3c');
 		var mappedHueOffset = map(hueOffset, 0, 4095, 0, 1);
 		var bgHSB           = Snap.rgb2hsb(bgRGB.r, bgRGB.g, bgRGB.b);
@@ -59,20 +80,19 @@ $.fn.geopattern = function(options) {
 	}
 
 	function geoHexagons(s, sha) {
-		var scale      = parseInt(sha.substr(1, 1), 16);
+		var scale      = hexVal(sha, 1);
 		var sideLength = map(scale, 0, 15, 5, 120);
 		var hexHeight  = sideLength * Math.sqrt(3);
 		var hexWidth   = sideLength * 2;
 		var hex        = createHexagon(s, sideLength).attr({stroke: '#000', opacity:0});
 		var dy, fill, i, opacity, tmpHex, val, x, y;
 
-		s.node.setAttribute('width',  (hexWidth * 3) + (sideLength * 3));
-		s.node.setAttribute('height', hexHeight * 6);
+		setDimensions(s, (hexWidth * 3) + (sideLength * 3), hexHeight * 6);
 
 		i = 0;
 		for (y = 0; y < 6; y++) {
 			for (x = 0; x < 6; x++) {
-				val     = parseInt(sha.substr(i, 1), 16);
+				val     = hexVal(sha, i);
 				dy      = x % 2 === 0 ? y * hexHeight : y * hexHeight + hexHeight / 2;
 				opacity = map(val, 0, 15, 0.02, 0.18);
 				fill    = (val % 2 === 0) ? '#ddd' : '#222';
@@ -131,16 +151,15 @@ $.fn.geopattern = function(options) {
 	}
 
 	function geoSineWaves(s, sha) {
-		var period    = Math.floor(map(parseInt(sha.substr(1, 1), 16), 0, 15, 100, 400));
-		var amplitude = Math.floor(map(parseInt(sha.substr(2, 1), 16), 0, 15, 30, 100));
-		var waveWidth = Math.floor(map(parseInt(sha.substr(3, 1), 16), 0, 15, 3, 30));
+		var period    = Math.floor(map(hexVal(sha, 1), 0, 15, 100, 400));
+		var amplitude = Math.floor(map(hexVal(sha, 2), 0, 15, 30, 100));
+		var waveWidth = Math.floor(map(hexVal(sha, 3), 0, 15, 3, 30));
 		var fill, i, line, opacity, str, val, xOffset;
 
-		s.node.setAttribute('width',  period);
-		s.node.setAttribute('height', waveWidth * 36);
+		setDimensions(s, period, waveWidth * 36);
 
 		for (i = 0; i < 36; i++) {
-			val     = parseInt(sha.substr(i, 1), 16);
+			val     = hexVal(sha, i);
 			fill    = (val % 2 === 0) ? '#ddd' : '#222';
 			opacity = map(val, 0, 15, 0.02, 0.15);
 			xOffset = period / 4 * 0.7;
@@ -176,18 +195,17 @@ $.fn.geopattern = function(options) {
 	}
 
 	function geoPlusSigns(s, sha) {
-		var squareSize = map(parseInt(sha.substr(0, 1), 16), 0, 15, 10, 25);
+		var squareSize = map(hexVal(sha, 0), 0, 15, 10, 25);
 		var plusSize   = squareSize * 3;
 		var plusShape  = createPlus(s, squareSize);
 		var dx, fill, i, opacity, plusTmp, val, x, y;
 
-		s.node.setAttribute('width', squareSize * 12);
-		s.node.setAttribute('height', squareSize * 12);
+		setDimensions(s, squareSize * 12);
 
 		i = 0;
 		for (y = 0; y < 6; y++) {
 			for (x = 0; x < 6; x++) {
-				val     = parseInt(sha.substr(i, 1), 16);
+				val     = hexVal(sha, i);
 				opacity = map(val, 0, 15, 0.02, 0.15);
 				fill    = (val % 2 === 0) ? '#ddd' : '#222';
 				dx      = (y % 2 === 0) ? 0 : 1;
@@ -249,18 +267,17 @@ $.fn.geopattern = function(options) {
 	}
 
 	function geoXes(s, sha) {
-		var squareSize = map(parseInt(sha.substr(0, 1), 16), 0, 15, 10, 25);
+		var squareSize = map(hexVal(sha, 0), 0, 15, 10, 25);
 		var xShape     = createPlus(s, squareSize);
 		var xSize      = squareSize * 3 * 0.943;
 		var dy, fill, i, opacity, val, x, xTmp, y;
 
-		s.node.setAttribute('width',  xSize * 3);
-		s.node.setAttribute('height', xSize * 3.5);
+		setDimensions(s, xSize * 3, xSize * 3.5);
 
 		i = 0;
 		for (y = 0; y < 6; y++) {
 			for (x = 0; x < 6; x++) {
-				val     = parseInt(sha.substr(i, 1), 16);
+				val     = hexVal(sha, i);
 				opacity = map(val, 0, 15, 0.02, 0.15);
 				dy      = x % 2 === 0 ? y * xSize - xSize * 0.5 : y * xSize - xSize * 0.5 + xSize / 4;
 				fill    = (val % 2 === 0) ? '#ddd' : '#222';
@@ -320,18 +337,17 @@ $.fn.geopattern = function(options) {
 	}
 
 	function geoOverlappingCircles(s, sha) {
-		var scale    = parseInt(sha.substr(1, 1), 16);
+		var scale    = hexVal(sha, 1);
 		var diameter = map(scale, 0, 15, 20, 200);
 		var radius   = diameter / 2;
 		var circle, fill, i, opacity, val, x, y;
 
-		s.node.setAttribute('width',  radius * 6);
-		s.node.setAttribute('height', radius * 6);
+		setDimensions(s, radius * 6);
 
 		i = 0;
 		for (y = 0; y < 6; y++) {
 			for (x = 0; x < 6; x++) {
-				val     = parseInt(sha.substr(i, 1), 16);
+				val     = hexVal(sha, i);
 				opacity = map(val, 0, 15, 0.02, 0.1);
 				fill    = (val % 2 === 0) ? '#ddd' : '#222';
 				circle = s.circle(x * radius, y * radius, radius);
@@ -372,18 +388,17 @@ $.fn.geopattern = function(options) {
 	}
 
 	function geoBricks(s, sha) {
-		var squareSize = map(parseInt(sha.substr(0, 1), 16), 0, 15, 6, 60);
+		var squareSize = map(hexVal(sha, 0), 0, 15, 6, 60);
 		var brickWidth = squareSize * 2;
 		var gapSize    = squareSize * 0.1;
 		var attr, dx, fill, i, opacity, val, x, y;
 
-		s.node.setAttribute('width', (brickWidth + gapSize) * 6);
-		s.node.setAttribute('height', (squareSize + gapSize) * 6);
+		setDimensions(s, (brickWidth + gapSize) * 6, (squareSize + gapSize) * 6);
 
 		i = 0;
 		for (y = 0; y < 6; y++) {
 			for (x = 0; x < 6; x++) {
-				val     = parseInt(sha.substr(i, 1), 16);
+				val     = hexVal(sha, i);
 				opacity = map(val, 0, 15, 0.02, 0.2);
 				fill    = (val % 2 === 0) ? '#ddd' : '#222';
 				dx      = (y % 2 === 0) ? -squareSize : 0;
@@ -419,17 +434,15 @@ $.fn.geopattern = function(options) {
 	}
 
 	function geoSquares(s, sha) {
-		var squareSize = map(parseInt(sha.substr(0, 1), 16), 0, 15, 10, 70);
+		var squareSize = map(hexVal(sha, 0), 0, 15, 10, 70);
 		var i, square, val, x, y;
 
-		s.attr({
-			width:  squareSize * 6 + 'px',
-			height: squareSize * 6 + 'px'
-		});
+		setDimensions(s, squareSize * 6);
+
 		i = 0;
 		for (y = 0; y < 6; y++) {
 			for (x = 0; x < 6; x++) {
-				val = parseInt(sha.substr(i, 1), 16);
+				val = hexVal(sha, i);
 				square = s.rect(x * squareSize, y * squareSize, squareSize, squareSize);
 				square.attr({
 					fill: '#000',
@@ -441,17 +454,17 @@ $.fn.geopattern = function(options) {
 	}
 
 	function geoRings(s, sha) {
-		var scale = parseInt(sha.substr(1, 1), 16);
+		var scale = hexVal(sha, 1);
 		var ringSize = map(scale, 0, 15, 5, 80);
 		var strokeWidth = ringSize / 4;
 		var circle, i, val, x, y;
 
-		s.node.setAttribute('width',  (ringSize + strokeWidth) * 6);
-		s.node.setAttribute('height', (ringSize + strokeWidth) * 6);
+		setDimensions(s, (ringSize + strokeWidth) * 6);
+
 		i = 0;
 		for (y = 0; y < 6; y++) {
 			for (x = 0; x < 6; x++) {
-				val = parseInt(sha.substr(i, 1), 16);
+				val = hexVal(sha, i);
 				circle = s.circle(
 					x * ringSize + x * strokeWidth + (ringSize + strokeWidth) / 2,
 					y * ringSize + y * strokeWidth + (ringSize + strokeWidth) / 2,
@@ -468,13 +481,12 @@ $.fn.geopattern = function(options) {
 	}
 
 	function geoOverlappingRings(s, sha) {
-		var scale       = parseInt(sha.substr(1, 1), 16);
+		var scale       = hexVal(sha, 1);
 		var ringSize    = map(scale, 0, 15, 5, 80);
 		var strokeWidth = ringSize / 4;
 		var attr, circle, fill, i, x, y;
 
-		s.node.setAttribute('width', ringSize * 6);
-		s.node.setAttribute('height', ringSize * 6);
+		setDimensions(s, ringSize * 6);
 
 		i = 0;
 		for (y = 0; y < 6; y++) {
@@ -483,7 +495,7 @@ $.fn.geopattern = function(options) {
 					fill: 'none',
 					stroke: '#000',
 					strokeWidth: strokeWidth,
-					opacity: map(parseInt(sha.substr(i, 1), 16), 0, 15, 0.02, 0.16)
+					opacity: map(hexVal(sha, i), 0, 15, 0.02, 0.16)
 				};
 
 				circle = s.circle(x * ringSize, y * ringSize, ringSize);
@@ -517,20 +529,19 @@ $.fn.geopattern = function(options) {
 	}
 
 	function geoTriangles(s, sha) {
-		var scale          = parseInt(sha.substr(1, 1), 16);
+		var scale          = hexVal(sha, 1);
 		var sideLength     = map(scale, 0, 15, 5, 120);
 		var triangleHeight = sideLength / 2 * Math.sqrt(3);
 		var triangle       = createTriangle(s, sideLength, triangleHeight).attr({stroke: '#444', opacity:0});
 		var rotation       = 'r180,' + sideLength / 2 + ',' + triangleHeight / 2;
 		var fill, i, opacity, rot, tmpTri, val, x, y;
 
-		s.node.setAttribute('width',  sideLength * 3);
-		s.node.setAttribute('height', triangleHeight * 6);
+		setDimensions(s, sideLength * 3, triangleHeight * 6);
 
 		i = 0;
 		for (y = 0; y < 6; y++) {
 			for (x = 0; x < 6; x++) {
-				val  = parseInt(sha.substr(i, 1), 16);
+				val  = hexVal(sha, i);
 				fill = (val % 2 === 0) ? '#ddd' : '#222';
 				rot  = '';
 				if (y % 2 === 0) {
@@ -571,18 +582,17 @@ $.fn.geopattern = function(options) {
 	}
 
 	function geoTrianglesRotated(s, sha) {
-		var scale         = parseInt(sha.substr(1, 1), 16);
+		var scale         = hexVal(sha, 1);
 		var sideLength    = map(scale, 0, 15, 5, 120);
 		var triangleWidth = sideLength / 2 * Math.sqrt(3);
 		var dx, fill, i, opacity, rotation, val, x, y;
 
-		s.node.setAttribute('width', triangleWidth * 6);
-		s.node.setAttribute('height', sideLength * 3);
+		setDimensions(s, triangleWidth * 6, sideLength * 3);
 
 		i = 0;
 		for (y = 0; y < 6; y++) {
 			for (x = 0; x < 6; x++) {
-				val      = parseInt(sha.substr(i, 1), 16);
+				val      = hexVal(sha, i);
 				opacity  = map(val, 0, 15, 0.02, 0.15);
 				fill     = (val % 2 === 0) ? '#ddd' : '#222';
 				rotation = (x % 2 === y % 2) ? 0 : 180;
@@ -629,17 +639,16 @@ $.fn.geopattern = function(options) {
 	}
 
 	function geoDiamonds(s, sha) {
-		var diamondWidth  = map(parseInt(sha.substr(0, 1), 16), 0, 15, 10, 50);
-		var diamondHeight = map(parseInt(sha.substr(1, 1), 16), 0, 15, 10, 50);
+		var diamondWidth  = map(hexVal(sha, 0), 0, 15, 10, 50);
+		var diamondHeight = map(hexVal(sha, 1), 0, 15, 10, 50);
 		var dx, fill, i, opacity, val, x, y;
 
-		s.node.setAttribute('width', diamondWidth * 6);
-		s.node.setAttribute('height', diamondHeight * 3);
+		setDimensions(s, diamondWidth * 6, diamondHeight * 3);
 
 		i = 0;
 		for (y = 0; y < 6; y++) {
 			for (x = 0; x < 6; x++) {
-				val        = parseInt(sha.substr(i, 1), 16);
+				val        = hexVal(sha, i);
 				opacity    = map(val, 0, 15, 0.02, 0.15);
 				fill       = (val % 2 === 0) ? '#ddd' : '#222';
 				dx         = (y % 2 === 0) ? 0 : diamondWidth / 2;
@@ -704,9 +713,9 @@ $.fn.geopattern = function(options) {
 		// Horizontal stripes
 		i = 0;
 		for (y = 0; y < 18; y++) {
-			space = parseInt(sha.substr(i, 1), 16);
+			space = hexVal(sha, i);
 			height += space + 5;
-			val = parseInt(sha.substr(i + 1, 1), 16);
+			val = hexVal(sha, i + 1);
 			opacity = map(val, 0, 15, 0.02, 0.15);
 			fill = (val % 2 === 0) ? '#ddd' : '#222';
 			stripeHeight = val + 5;
@@ -721,9 +730,9 @@ $.fn.geopattern = function(options) {
 
 		i = 0;
 		for (x = 0; x < 18; x++) {
-			space = parseInt(sha.substr(i, 1), 16);
+			space = hexVal(sha, i);
 			width += space + 5;
-			val = parseInt(sha.substr(i + 1, 1), 16);
+			val = hexVal(sha, i + 1);
 			opacity = map(val, 0, 15, 0.02, 0.15);
 			fill = (val % 2 === 0) ? '#ddd' : '#222';
 			stripeWidth = val + 5;
@@ -735,15 +744,14 @@ $.fn.geopattern = function(options) {
 			i += 2;
 		}
 
-		s.node.setAttribute('width', width);
-		s.node.setAttribute('height', height);
+		setDimensions(s, width, height);
 	}
 
 	return this.each(function() {
 		var container = $(this);
 		var sha       = $(this).attr('data-title-sha');
 		var s         = getSnap();
-		var pattern   = parseInt(sha.substr(20, 1), 16);
+		var pattern   = hexVal(sha, 20);
 
 		setBGColor(s, sha, container);
 
