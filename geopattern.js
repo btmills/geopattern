@@ -17,7 +17,6 @@ $.fn.geopattern = function(options) {
 			snap = Snap(svg);
 		}
 		return snap;
-
 	}
 
 	function map(value, vMin, vMax, dMin, dMax) {
@@ -45,39 +44,18 @@ $.fn.geopattern = function(options) {
 		$(container).css('background-color', Snap.hsb2rgb(bgHSB.h, bgHSB.s, bgHSB.b).hex);
 	}
 
+	function renderPattern(s, container) {
+		var b64 = 'data:image/svg+xml;base64,' + window.btoa(s.toString());
+		var url = 'url("' + b64 + '")';
+		$(container).css('background-image', url);
+	}
+
 	function createHexagon(s, sideLength) {
 		var c = sideLength;
 		var a = c / 2;
 		var b = Math.sin(Snap.rad(60)) * c;
 
 		return s.polyline(0, b, a, 0, a + c, 0, 2 * c, b, a + c, 2 * b, a, 2 * b, 0, b);
-	}
-
-	function createPlus(s, squareSize) {
-		var shape = s.group(
-			s.rect(squareSize, 0, squareSize, squareSize * 3),
-			s.rect(0, squareSize, squareSize * 3, squareSize)
-		);
-
-		shape.attr({
-			opacity: 0
-		});
-		return shape;
-	}
-
-	function createTriangle(s, sideLength, height) {
-		var halfWidth = sideLength / 2;
-		return s.polyline(halfWidth, 0, sideLength, height, 0, height, halfWidth, 0);
-	}
-
-	function createDiamond(s, width, height) {
-		return s.polyline(width / 2, 0, width, height / 2, width / 2, height, 0, height / 2);
-	}
-
-	function renderPattern(s, container) {
-		var b64 = 'data:image/svg+xml;base64,' + window.btoa(s.toString());
-		var url = 'url("' + b64 + '")';
-		$(container).css('background-image', url);
 	}
 
 	function geoHexagons(s, sha) {
@@ -183,6 +161,18 @@ $.fn.geopattern = function(options) {
 				transform: 't-' + period / 4 + ',' + (waveWidth * i - amplitude * 1.5 + waveWidth * 36)
 			});
 		}
+	}
+
+	function createPlus(s, squareSize) {
+		var shape = s.group(
+			s.rect(squareSize, 0, squareSize, squareSize * 3),
+			s.rect(0, squareSize, squareSize * 3, squareSize)
+		);
+
+		shape.attr({
+			opacity: 0
+		});
+		return shape;
 	}
 
 	function geoPlusSigns(s, sha) {
@@ -521,6 +511,11 @@ $.fn.geopattern = function(options) {
 		}
 	}
 
+	function createTriangle(s, sideLength, height) {
+		var halfWidth = sideLength / 2;
+		return s.polyline(halfWidth, 0, sideLength, height, 0, height, halfWidth, 0);
+	}
+
 	function geoTriangles(s, sha) {
 		var scale          = parseInt(sha.substr(1, 1), 16);
 		var sideLength     = map(scale, 0, 15, 5, 120);
@@ -569,6 +564,68 @@ $.fn.geopattern = function(options) {
 				i++;
 			}
 		}
+	}
+
+	function createRotatedTriangle(s, sideLength, width) {
+		return s.polyline(0, 0, width, sideLength / 2, 0, sideLength, 0, 0);
+	}
+
+	function geoTrianglesRotated(s, sha) {
+		var scale         = parseInt(sha.substr(1, 1), 16);
+		var sideLength    = map(scale, 0, 15, 5, 120);
+		var triangleWidth = sideLength / 2 * Math.sqrt(3);
+		var dx, fill, i, opacity, rotation, val, x, y;
+
+		s.node.setAttribute('width', triangleWidth * 6);
+		s.node.setAttribute('height', sideLength * 3);
+
+		i = 0;
+		for (y = 0; y < 6; y++) {
+			for (x = 0; x < 6; x++) {
+				val      = parseInt(sha.substr(i, 1), 16);
+				opacity  = map(val, 0, 15, 0.02, 0.15);
+				fill     = (val % 2 === 0) ? '#ddd' : '#222';
+				rotation = (x % 2 === y % 2) ? 0 : 180;
+				dx       = 0;
+
+				createRotatedTriangle(s, sideLength, triangleWidth).attr({
+					opacity: opacity,
+					fill: fill,
+					stroke: '#444',
+					transform: 't' + [
+						triangleWidth * x,
+						y * sideLength * 0.5 - sideLength / 2
+					] + 'r' + [
+						rotation,
+						triangleWidth / 2,
+						sideLength / 2
+					]
+				});
+
+				// Add an extra row at the end that matches the first row, for tiling.
+				if (y === 0) {
+					createRotatedTriangle(s, sideLength, triangleWidth).attr({
+						opacity: opacity,
+						fill: fill,
+						stroke: '#444',
+						transform: 't' + [
+							triangleWidth * x - dx,
+							6 * sideLength * 0.5 - sideLength / 2
+						] + 'r' + [
+							rotation,
+							triangleWidth / 2,
+							sideLength / 2
+						]
+					});
+				}
+
+				i += 1;
+			}
+		}
+	}
+
+	function createDiamond(s, width, height) {
+		return s.polyline(width / 2, 0, width, height / 2, width / 2, height, 0, height / 2);
 	}
 
 	function geoDiamonds(s, sha) {
@@ -716,13 +773,10 @@ $.fn.geopattern = function(options) {
 			case 11:
 				geoDiamonds(s, sha); break;
 			case 12:
-				break;
 			case 13:
-				break;
 			case 14:
-				break;
 			case 15:
-				break;
+				geoTrianglesRotated(s, sha); break;
 		}
 		renderPattern(s, container);
 	});
