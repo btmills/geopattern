@@ -74,7 +74,12 @@
         else {
           bgHSB.s -= satOffset;
         }
-        $(container).css('background-color', Snap.hsb2rgb(bgHSB.h, bgHSB.s, bgHSB.b).hex);
+        var color = Snap.hsb2rgb
+        if (options && typeof options.background === 'function') {
+          options.background(Snap.hsb2rgb(bgHSB.h, bgHSB.s, bgHSB.b).hex);
+        } else {
+          $(container).css('background-color', Snap.hsb2rgb(bgHSB.h, bgHSB.s, bgHSB.b).hex);
+        }
       }
 
       function geoSquares(s, sha) {
@@ -399,7 +404,11 @@
       function renderPattern(s, container) {
         var b64 = 'data:image/svg+xml;base64,'+window.btoa(s.toString());
         var url = 'url("' + b64 + '")';
-        $(container).css('background-image', url);
+        if (options && typeof options.pattern === 'function') {
+          options.pattern(b64);
+        } else {
+          $(container).css('background-image', url);
+        }
       }
 
       function map(value, v_min, v_max, d_min, d_max) {

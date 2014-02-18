@@ -7,19 +7,57 @@
 	<link href="geopattern.css" rel="stylesheet" />
 </head>
 <body>
-	<div class="js-geopattern"></div>
+	<canvas id="geopattern"></canvas>
 	<input type="text" id="string" value="Type Here" />
+	<a id="save" href="#">Save</a>
 	<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/sha1.js"></script>
 	<script src="jquery.js"></script>
 	<script src="snap.svg-min.js"></script>
 	<script src="geopattern.js"></script>
 	<script>
+		var usingCanvas = true;
+
+		var canvas = document.getElementById('geopattern');
+		canvas.width = window.screen.availWidth;
+		canvas.height = window.screen.availHeight;
+		var ctx = canvas.getContext('2d');
+		ctx.rect(0, 0, canvas.width, canvas.height);
+
 		$('#string')
 			.on('keyup', function () {
 				var sha = CryptoJS.SHA1(this.value).toString();
-				$('.js-geopattern')
+				var background = 'blue';
+				$('#geopattern')
 					.attr('data-title-sha', sha)
-					.geopattern();
+					.geopattern(!usingCanvas ? void 0 : {
+						background: function (color) {
+							background = color;
+						},
+						pattern: function (b64) {
+							var img = new Image();
+							img.onload = function () {
+								try {
+									ctx.fillStyle = background;
+									ctx.fill();
+									var pattern = ctx.createPattern(img, 'repeat');
+									ctx.fillStyle = pattern;
+									ctx.fill();
+									$('#save')
+										.attr('href', canvas.toDataURL('image/png'))
+										.css('display', 'block');
+								} catch (ex) {
+									usingCanvas = false;
+									$('#geopattern').replaceWith(
+										$('<div>')
+											.attr('id', 'geopattern')
+									);
+									console.log($('#geopattern'));
+									$('#string').trigger('keyup');
+								}
+							};
+							img.src = b64;
+						}
+					});
 			})
 			.trigger('keyup')
 			.focus();
