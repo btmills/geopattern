@@ -1,0 +1,11 @@
+{
+  "name": "geopattern",
+  "version": "0.0.1",
+  "dependencies": {
+    "color": "~0.5.0",
+    "extend": "~1.2.1"
+  },
+  "devDependencies": {
+    "browserify": "~3.30.1"
+  }
+}
