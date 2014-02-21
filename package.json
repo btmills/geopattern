@@ -6,6 +6,12 @@
     "extend": "~1.2.1"
   },
   "devDependencies": {
-    "browserify": "~3.30.1"
+    "browserify": "~3.30.1",
+    "gulp-util": "~2.2.14",
+    "gulp": "~3.5.2",
+    "gulp-browserify": "~0.4.6",
+    "gulp-eslint": "~0.1.4",
+    "gulp-rename": "~1.1.0",
+    "gulp-uglify": "~0.2.1"
   }
 }
