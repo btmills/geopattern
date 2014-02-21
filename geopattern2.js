@@ -41,9 +41,6 @@ if ($) {
 			}
 			var pattern = new Pattern(string, options);
 			$(this).css('background-image', pattern.toDataUrl());
-			console.log(pattern);
-			console.log(pattern.toString());
-			//console.log(pattern.toDataUrl());
 		});
 	});
 
