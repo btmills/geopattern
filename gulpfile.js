@@ -5,7 +5,7 @@ var eslint     = require('gulp-eslint');
 var rename     = require('gulp-rename');
 var uglify     = require('gulp-uglify');
 
-var scripts = ['geopattern2.js', 'lib/*.js'];
+var scripts = ['geopattern.js', 'lib/*.js'];
 
 gulp.task('lint', function () {
 	gulp.src(scripts)
@@ -14,11 +14,11 @@ gulp.task('lint', function () {
 });
 
 gulp.task('browserify', function () {
-	gulp.src('geopattern2.js')
+	gulp.src('geopattern.js')
 		.pipe(browserify())
 		.pipe(uglify())
 		.pipe(rename('geopattern.min.js'))
-		.pipe(gulp.dest('./'));
+		.pipe(gulp.dest('./js'));
 });
 
 gulp.task('watch', function () {
