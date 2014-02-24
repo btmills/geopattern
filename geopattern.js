@@ -26,6 +26,12 @@ function optArgs(cb) {
 	};
 }
 
+var GeoPattern = module.exports = {
+	generate: optArgs(function (string, options) {
+		return new Pattern(string, options);
+	})
+};
+
 if ($) {
 
 	// If jQuery, add plugin
@@ -37,18 +43,11 @@ if ($) {
 					hash: titleSha
 				}, options);
 			}
-			var pattern = new Pattern(string, options);
+			var pattern = GeoPattern.generate(string, options);
 			$(this).css('background-image', pattern.toDataUrl());
 		});
 	});
 
 }
 
-// Register global
-window.GeoPattern = {
-	generate: optArgs(function (string, options) {
-		return new Pattern(string, options);
-	})
-};
-
-}(jQuery));
+}(typeof jQuery !== 'undefined' ? jQuery : null));

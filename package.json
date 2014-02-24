@@ -1,6 +1,34 @@
 {
   "name": "geopattern",
   "version": "0.0.1",
+  "description": "Generate beautiful SVG patterns",
+  "keywords": [
+    "svg",
+    "pattern",
+    "geometric",
+    "background"
+  ],
+  "homepage": "https://github.com/btmills/geopattern",
+  "bugs": "https://github.com/btmills/geopattern/issues",
+  "license": "MIT",
+  "contributors": [
+    "Brandon Mills",
+    "Jason Long"
+  ],
+  "files": [
+    "README.md",
+    "LICENSE",
+    "package.json",
+    "gulpfile.js",
+    "geopattern.js",
+    "lib/pattern.js",
+    "lib/svg.js"
+  ],
+  "main": "geopattern.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/btmills/geopattern"
+  },
   "dependencies": {
     "color": "~0.5.0",
     "extend": "~1.2.1"
@@ -11,7 +39,7 @@
     "gulp": "~3.5.2",
     "gulp-browserify": "~0.4.6",
     "gulp-eslint": "~0.1.4",
-    "gulp-rename": "~1.1.0",
-    "gulp-uglify": "~0.2.1"
+    "gulp-uglify": "~0.2.1",
+    "gulp-concat": "^2.1.7"
   }
 }

@@ -1,8 +1,8 @@
 var gulp       = require('gulp');
 var gutil      = require('gulp-util');
 var browserify = require('gulp-browserify');
+var concat     = require('gulp-concat');
 var eslint     = require('gulp-eslint');
-var rename     = require('gulp-rename');
 var uglify     = require('gulp-uglify');
 
 var scripts = ['geopattern.js', 'lib/*.js'];
@@ -15,9 +15,11 @@ gulp.task('lint', function () {
 
 gulp.task('browserify', function () {
 	gulp.src('geopattern.js')
-		.pipe(browserify())
+		.pipe(browserify({
+			standalone: 'GeoPattern'
+		}))
 		.pipe(uglify())
-		.pipe(rename('geopattern.min.js'))
+		.pipe(concat('geopattern.min.js'))
 		.pipe(gulp.dest('./js'));
 });
 
