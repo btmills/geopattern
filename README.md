@@ -1,6 +1,6 @@
 # GeoPattern
 
-This is a JavaScript port of [jasonlong/geo_pattern](https://github.com/jasonlong/geo_pattern) with a [live preview page](http://btmills.github.io/geopatterns/geopattern.html) and is derived from the background generator originally used for [GitHub Guides](http://guides.github.com/).
+This is a JavaScript port of [jasonlong/geo_pattern](https://github.com/jasonlong/geo_pattern) with a [live preview page](http://btmills.github.io/geopattern/geopattern.html) and is derived from the background generator originally used for [GitHub Guides](http://guides.github.com/).
 
 ## Usage
 
