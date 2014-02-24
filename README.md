@@ -1,28 +1,60 @@
-# GeoPatterns-JS
+# GeoPattern
 
-This is a JavaScript port of [jasonlong/geo_pattern](https://github.com/jasonlong/geo_pattern) with a [live preview page](http://btmills.github.io/geopatterns-js/geopattern.html) and is derived from the background generator used for [GitHub Guides](http://guides.github.com/).
+This is a JavaScript port of [jasonlong/geo_pattern](https://github.com/jasonlong/geo_pattern) with a [live preview page](http://btmills.github.io/geopatterns/geopattern.html) and is derived from the background generator originally used for [GitHub Guides](http://guides.github.com/).
 
 ## Usage
 
-The jQuery plugin [`geopattern.js`](geopattern.js) can be used independently. It requires [jQuery](http://jquery.com/), [Snap.svg](http://snapsvg.io/), and the [CryptoJS](https://code.google.com/p/crypto-js/) SHA-1 library. Add these scripts to your page:
+### Web
+
+Include the [minified script](js/geopattern.min.js). jQuery is optional.
 
 ```HTML
-<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/sha1.js"></script>
-<script src="jquery.js"></script>
-<script src="snap.svg-min.js"></script>
-<script src="geopattern.js"></script>
+<script src="js/jquery.min.js"></script> <!-- optional -->
+<script src="js/geopattern.min.js"></script>
 ```
 
-Then, in your script, add a `data-title-sha` attribute to an element, and call `geopattern()` on the element.
+Use either the `GeoPattern` browser global or the jQuery plugin:
 
-```js
-var sha = CryptoJS.SHA1('some string').toString();
-$('#geopattern')
-    .attr('data-title-sha', sha)
-    .geopattern();
+```JavaScript
+// Use the global...
+var pattern = GeoPattern.generate('GitHub');
+$('#geopattern').css('background-image', pattern.toDataUrl());
+
+// ...or the plugin
+$('#geopattern').geopattern('GitHub');
 ```
+
+For backwards compatibility with the script on the [Guides](http://guides.github.com/), the source hash for generation can be supplied with a `data-title-sha` attribute on the element. If the attribute exists, the generator will ignore the input string and use the supplied hash.
 
 View [`geopattern.html`](geopattern.html) for a complete example.
+
+### API
+
+#### GeoPattern.generate(string, options)
+
+Returns a newly-generated, tiling SVG Pattern.
+
+- `string` Will be hashed using the SHA1 algorithm, and the resulting hash will be used as the seed for generation.
+
+- `options.baseColor` Controls the background color of the generated image.
+
+- `options.generator` Determines the pattern. [All of the original patterns](https://github.com/jasonlong/geo_pattern#available-patterns) are available in this port.
+
+#### Pattern.toString() and Pattern.toSvg()
+
+Gets the SVG string representing the pattern.
+
+#### Pattern.toBase64()
+
+Gets the SVG as a Base64-encoded string.
+
+#### Pattern.toDataUri()
+
+Gets the pattern as a data URI, i.e. `data:image/svg+xml;base64,PHN2ZyB...`.
+
+#### Pattern.toDataUrl()
+
+Gets the pattern as a data URL suitable for use as a CSS `background-image`, i.e. `url("data:image/svg+xml;base64,PHN2ZyB...")`.
 
 ## License
 
