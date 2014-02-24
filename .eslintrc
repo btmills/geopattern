@@ -1,6 +1,10 @@
 {
 	"env": {
-		"browser": true
+		"browser": true,
+		"node": true
+	},
+	"globals": {
+		"jQuery": true
 	},
 	"rules": {
 		"no-bitwise": 2,

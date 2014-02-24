@@ -9,16 +9,12 @@
 <body>
 	<div class="js-geopattern"></div>
 	<input type="text" id="string" value="Type Here" />
-	<!--script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/sha1.js"></script-->
 	<script src="jquery.js"></script>
-	<script src="snap.svg-min.js"></script>
 	<script src="geopattern.min.js"></script>
 	<script>
 		$('#string')
 			.on('keyup', function () {
-				//var sha = CryptoJS.SHA1(this.value).toString();
 				$('.js-geopattern')
-					//.attr('data-title-sha', sha)
 					.geopattern(this.value);
 			})
 			.trigger('keyup')

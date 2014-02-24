@@ -1,5 +1,3 @@
-/*global jQuery */
-
 (function ($) {
 
 'use strict';
@@ -24,7 +22,7 @@ function optArgs(cb) {
 			options = {};
 		}
 
-		cb.call(this, string, options);
+		return cb.call(this, string, options);
 	};
 }
 
@@ -44,15 +42,13 @@ if ($) {
 		});
 	});
 
-} else {
-
-	// If no jQuery, register global
-	window.GeoPattern = {
-		generate: optArgs(function (string, options) {
-			return new Pattern(string, options);
-		})
-	};
-
 }
+
+// Register global
+window.GeoPattern = {
+	generate: optArgs(function (string, options) {
+		return new Pattern(string, options);
+	})
+};
 
 }(jQuery));
