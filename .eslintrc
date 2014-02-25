@@ -7,7 +7,6 @@
 		"jQuery": true
 	},
 	"rules": {
-		"no-bitwise": 2,
 		"no-div-regex": 2,
 		"no-else-return": 2,
 		"no-eq-null": 2,
