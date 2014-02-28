@@ -18,7 +18,8 @@ gulp.task('browserify', function () {
 	gulp.src('geopattern.js')
 		.pipe(plumber())
 		.pipe(browserify({
-			standalone: 'GeoPattern'
+			standalone: 'GeoPattern',
+			ignore: 'buffer'
 		}))
 		.pipe(uglify())
 		.pipe(concat('geopattern.min.js'))
