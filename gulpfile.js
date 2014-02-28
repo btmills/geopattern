@@ -3,6 +3,7 @@ var gutil      = require('gulp-util');
 var browserify = require('gulp-browserify');
 var concat     = require('gulp-concat');
 var eslint     = require('gulp-eslint');
+var plumber    = require('gulp-plumber');
 var uglify     = require('gulp-uglify');
 
 var scripts = ['geopattern.js', 'lib/*.js'];
@@ -15,6 +16,7 @@ gulp.task('lint', function () {
 
 gulp.task('browserify', function () {
 	gulp.src('geopattern.js')
+		.pipe(plumber())
 		.pipe(browserify({
 			standalone: 'GeoPattern'
 		}))

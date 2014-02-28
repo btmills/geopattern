@@ -40,6 +40,7 @@
     "gulp-browserify": "~0.4.6",
     "gulp-eslint": "~0.1.4",
     "gulp-uglify": "~0.2.1",
-    "gulp-concat": "^2.1.7"
+    "gulp-concat": "^2.1.7",
+    "gulp-plumber": "^0.5.6"
   }
 }
