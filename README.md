@@ -28,6 +28,20 @@ For backwards compatibility with the script on the [Guides](http://guides.github
 
 View [`geopattern.html`](geopattern.html) for a complete example.
 
+### Node.js
+
+```bash
+npm install geopattern
+```
+
+After requiring `geopattern`, the API is identical to the browser version, minus the jQuery plugin.
+
+```js
+var GeoPattern = require('geopattern');
+var pattern = GeoPattern.generate('GitHub');
+pattern.toDataUrl(); // url("data:image/svg+xml;...
+```
+
 ### API
 
 #### GeoPattern.generate(string, options)
@@ -36,9 +50,9 @@ Returns a newly-generated, tiling SVG Pattern.
 
 - `string` Will be hashed using the SHA1 algorithm, and the resulting hash will be used as the seed for generation.
 
-- `options.baseColor` Controls the background color of the generated image.
+- `options.baseColor` Controls the relative background color of the generated image. The color is not identical to that used in the pattern because the hue is rotated by the generator. This is a CSS hexadecimal color value, which defaults to `#933c3c`.
 
-- `options.generator` Determines the pattern. [All of the original patterns](https://github.com/jasonlong/geo_pattern#available-patterns) are available in this port.
+- `options.generator` Determines the pattern. [All of the original patterns](https://github.com/jasonlong/geo_pattern#available-patterns) are available in this port, and their names are camelCased.
 
 #### Pattern.toString() and Pattern.toSvg()
 
