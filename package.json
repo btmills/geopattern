@@ -15,15 +15,6 @@
     "Brandon Mills",
     "Jason Long"
   ],
-  "files": [
-    "README.md",
-    "LICENSE",
-    "package.json",
-    "gulpfile.js",
-    "geopattern.js",
-    "lib/pattern.js",
-    "lib/svg.js"
-  ],
   "main": "geopattern.js",
   "repository": {
     "type": "git",
