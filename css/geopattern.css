@@ -25,3 +25,7 @@ input {
 	outline: 0;
 	font-size: inherit;
 }
+
+input::-ms-clear {
+	display: none;
+}
