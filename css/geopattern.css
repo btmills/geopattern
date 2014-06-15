@@ -16,7 +16,14 @@ body, html {
 	margin: 0;
 	padding: 0;
 }
-
+/* to prevent the flicker in between changing images */
+.js-geopattern{
+	-webkit-transition: background-image 0.2s ease-in-out;
+	-moz-transition: background-image 0.2s ease-in-out;
+	-ms-transition: background-image 0.2s ease-in-out;
+	-o-transition: background-image 0.2s ease-in-out;
+	transition: background-image 0.2s ease-in-out;
+}
 input {
 	text-align: center;
 	color: rgba(230, 230, 230, 0.8);
