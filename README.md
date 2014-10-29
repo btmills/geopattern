@@ -56,6 +56,14 @@ Returns a newly-generated, tiling SVG Pattern.
 
 - `options.generator` Determines the pattern. [All of the original patterns](https://github.com/jasonlong/geo_pattern#available-patterns) are available in this port, and their names are camelCased.
 
+#### Pattern.color
+
+Gets the pattern's background color as a hexadecimal string.
+
+```js
+GeoPattern.generate('GitHub').color // => "#455e8a"
+```
+
 #### Pattern.toString() and Pattern.toSvg()
 
 Gets the SVG string representing the pattern.
