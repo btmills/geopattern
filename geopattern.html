@@ -27,7 +27,6 @@
 		function onChange($el, cb) {
 			var last = $el.val();
 			$el.on('input', function () {
-				console.log('input');
 				var val = $el.val();
 				var oldVal;
 				if (last !== val) {
