@@ -3,7 +3,7 @@ body, html {
 	padding: 0;
 	width: 100%;
 	height: 100%;
-	font-size: 18pt;
+	font-size: 30pt;
 	background: #7f7f7f;
 }
 
@@ -20,11 +20,12 @@ body, html {
 
 input {
 	text-align: center;
-	color: rgba(230, 230, 230, 0.8);
+	color: #f7f7f7;
 	background: rgba(0, 0, 0, 0);
 	border: 0;
 	outline: 0;
 	font-size: inherit;
+	text-shadow: 0 0 5px rgba(255, 255, 255, 0.75);
 }
 
 input::-ms-clear {
