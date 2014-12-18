@@ -17,7 +17,9 @@
   ],
   "main": "geopattern.js",
   "scripts": {
-    "test": "node_modules/eslint/bin/eslint.js ."
+    "lint": "node node_modules/eslint/bin/eslint.js .",
+    "mocha": "node node_modules/mocha/bin/mocha tests",
+    "test": "npm run lint && npm run mocha"
   },
   "repository": {
     "type": "git",
@@ -33,6 +35,8 @@
     "gulp-browserify": "~0.4.6",
     "gulp-concat": "^2.1.7",
     "gulp-plumber": "^0.5.6",
-    "gulp-uglify": "~0.2.1"
+    "gulp-uglify": "~0.2.1",
+    "mocha": "^2.0.1",
+    "xml-parser": "^1.2.0"
   }
 }
