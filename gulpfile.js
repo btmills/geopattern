@@ -1,15 +1,27 @@
 'use strict';
 
-var gulp       = require('gulp');
-var browserify = require('gulp-browserify');
-var concat     = require('gulp-concat');
-var plumber    = require('gulp-plumber');
-var uglify     = require('gulp-uglify');
+var gulp        = require('gulp');
+var browserify  = require('gulp-browserify');
+var concat      = require('gulp-concat');
+var plumber     = require('gulp-plumber');
+var to5         = require('gulp-6to5');
+var uglify      = require('gulp-uglify');
+var packagejson = require('./package.json');
 
-var scripts = ['geopattern.js', 'lib/*.js'];
+var paths = {
+	src: ['src/**/*.js'],
+	lib: 'lib',
+	main: packagejson.main
+};
+
+gulp.task('build', function () {
+	gulp.src(paths.src)
+		.pipe(to5())
+		.pipe(gulp.dest(paths.lib));
+});
 
 gulp.task('browserify', function () {
-	gulp.src('geopattern.js')
+	gulp.src(paths.main)
 		.pipe(plumber())
 		.pipe(browserify({
 			standalone: 'GeoPattern',
@@ -21,7 +33,7 @@ gulp.task('browserify', function () {
 });
 
 gulp.task('watch', function () {
-	gulp.watch(scripts, ['browserify']);
+	gulp.watch(paths.src, ['build', 'browserify']);
 });
 
-gulp.task('default', ['browserify', 'watch']);
+gulp.task('default', ['build', 'watch']);
