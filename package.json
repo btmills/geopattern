@@ -26,7 +26,8 @@
     "url": "https://github.com/btmills/geopattern"
   },
   "dependencies": {
-    "extend": "~1.2.1"
+    "extend": "^2.0.0",
+    "object.assign": "^1.1.1"
   },
   "devDependencies": {
     "browserify": "~3.30.1",

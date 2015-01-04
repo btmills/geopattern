@@ -1,135 +1,119 @@
-'use strict';
+import assign from 'object.assign';
+import XMLNode from './xmlnode';
 
-var extend = require('extend');
-var XMLNode = require('./xml');
-
-function SVG() {
-	this.width = 100;
-	this.height = 100;
-	this.svg = new XMLNode('svg');
-	this.context = []; // Track nested nodes
-	this.setAttributes(this.svg, {
-		xmlns: 'http://www.w3.org/2000/svg',
-		width: this.width,
-		height: this.height
-	});
-
-	return this;
-}
-
-module.exports = SVG;
-
-// This is a hack so groups work.
-SVG.prototype.currentContext = function () {
-	return this.context[this.context.length - 1] || this.svg;
-};
-
-// This is a hack so groups work.
-SVG.prototype.end = function () {
-	this.context.pop();
-	return this;
-};
-
-SVG.prototype.currentNode = function () {
-	var context = this.currentContext();
-	return context.lastChild || context;
-};
-
-SVG.prototype.transform = function (transformations) {
-	this.currentNode().setAttribute('transform',
-		Object.keys(transformations).map(function (transformation) {
-			return transformation + '(' + transformations[transformation].join(',') + ')';
-		}).join(' ')
-	);
-	return this;
-};
-
-SVG.prototype.setAttributes = function (el, attrs) {
-	Object.keys(attrs).forEach(function (attr) {
-		el.setAttribute(attr, attrs[attr]);
-	});
-};
-
-SVG.prototype.setWidth = function (width) {
-	this.svg.setAttribute('width', Math.floor(width));
-};
-
-SVG.prototype.setHeight = function (height) {
-	this.svg.setAttribute('height', Math.floor(height));
-};
-
-SVG.prototype.toString = function () {
-	return this.svg.toString();
-};
-
-SVG.prototype.rect = function (x, y, width, height, args) {
-	// Accept array first argument
-	var self = this;
-	if (Array.isArray(x)) {
-		x.forEach(function (a) {
-			self.rect.apply(self, a.concat(args));
+export default class SVG {
+	constructor() {
+		this.width = 100;
+		this.height = 100;
+		this.svg = new XMLNode('svg');
+		this.context = []; // Track nested nodes
+		this.setAttributes(this.svg, {
+			xmlns: 'http://www.w3.org/2000/svg',
+			width: this.width,
+			height: this.height
 		});
+	}
+
+	// This is a hack so groups work.
+	currentContext() {
+		return this.context[this.context.length - 1] || this.svg;
+	}
+
+	// This is a hack so groups work.
+	end() {
+		this.context.pop();
+	}
+
+	currentNode() {
+		var context = this.currentContext();
+		return context.lastChild || context;
+	}
+
+	newChild(type) {
+		let child = new XMLNode(type);
+		this.currentContext().appendChild(child);
+		return child;
+	}
+
+	transform(transformations) {
+		this.currentNode().setAttribute('transform',
+			Object.keys(transformations).map(transformation => {
+				let args = transformations[transformation].join(',');
+				return `${transformation}(${args})`;
+			}).join(' ')
+		);
+
 		return this;
 	}
 
-	var rect = new XMLNode('rect');
-	this.currentContext().appendChild(rect);
-	this.setAttributes(rect, extend({
-		x: x,
-		y: y,
-		width: width,
-		height: height
-	}, args));
-
-	return this;
-};
-
-SVG.prototype.circle = function (cx, cy, r, args) {
-	var circle = new XMLNode('circle');
-	this.currentContext().appendChild(circle);
-	this.setAttributes(circle, extend({
-		cx: cx,
-		cy: cy,
-		r: r
-	}, args));
-
-	return this;
-};
-
-SVG.prototype.path = function (str, args) {
-	var path = new XMLNode('path');
-	this.currentContext().appendChild(path);
-	this.setAttributes(path, extend({
-		d: str
-	}, args));
-
-	return this;
-};
-
-SVG.prototype.polyline = function (str, args) {
-	// Accept array first argument
-	var self = this;
-	if (Array.isArray(str)) {
-		str.forEach(function (s) {
-			self.polyline(s, args);
+	setAttributes(el, attrs) {
+		Object.keys(attrs).forEach(attr => {
+			el.setAttribute(attr, attrs[attr]);
 		});
+	}
+
+	setWidth(width) {
+		this.svg.setAttribute('width', Math.floor(width));
+	}
+
+	setHeight(height) {
+		this.svg.setAttribute('height', Math.floor(height));
+	}
+
+	toString() {
+		return this.svg.toString();
+	}
+
+	rect(x, y, width, height, args) {
+		// Accept an array as the first argument
+		if (Array.isArray(x)) {
+			x.forEach(r => { this.rect(...r); });
+		} else {
+
+			let rect = this.newChild('rect');
+			this.setAttributes(rect, assign({
+				x, y, width, height
+			}, args));
+
+		}
+
 		return this;
 	}
 
-	var polyline = new XMLNode('polyline');
-	this.currentContext().appendChild(polyline);
-	this.setAttributes(polyline, extend({
-		points: str
-	}, args));
+	circle(cx, cy, r, args) {
+		let circle = this.newChild('circle');
+		this.setAttributes(circle, assign({ cx, cy, r }, args));
 
-	return this;
-};
+		return this;
+	}
 
-// group and context are hacks
-SVG.prototype.group = function (args) {
-	var group = new XMLNode('g');
-	this.currentContext().appendChild(group);
-	this.context.push(group);
-	this.setAttributes(group, extend({}, args));
-	return this;
+	path(str, args) {
+		let path = this.newChild('path');
+		this.setAttributes(path, assign({ d: str }, args));
+
+		return this;
+	}
+
+	polyline(points, args) {
+		// Accept an array as the first argument
+		if (Array.isArray(points)) {
+			points.forEach(s => { this.polyline(s, args); });
+		} else {
+
+			let polyline = this.newChild('polyline');
+			this.setAttributes(polyline, assign({ points }, args));
+
+		}
+
+		return this;
+	}
+
+	// Group and context are hacks
+	group(args = {}) {
+		let g = this.newChild('g');
+		this.context.push(g);
+		this.setAttributes(g, args);
+
+		return this;
+	}
 };
