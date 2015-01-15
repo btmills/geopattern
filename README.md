@@ -26,7 +26,7 @@ $('#geopattern').geopattern('GitHub');
 
 For backwards compatibility with the script on the [Guides](http://guides.github.com/), the source hash for generation can be supplied with a `data-title-sha` attribute on the element. If the attribute exists, the generator will ignore the input string and use the supplied hash.
 
-View [`geopattern.html`](geopattern.html) for a complete example.
+View [`geopattern.html`](https://github.com/btmills/geopattern/blob/gh-pages/geopattern.html) for a complete example.
 
 ### Node.js
 

@@ -1,5 +1,6 @@
-css
 js
-geopattern.html
-gulpfile.js
+tests
+
+.eslintignore
 .eslintrc
+gulpfile.js

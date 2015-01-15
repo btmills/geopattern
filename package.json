@@ -15,7 +15,7 @@
     "Brandon Mills",
     "Jason Long"
   ],
-  "main": "geopattern.js",
+  "main": "index.js",
   "scripts": {
     "lint": "node node_modules/eslint/bin/eslint.js .",
     "mocha": "node node_modules/mocha/bin/mocha tests",
