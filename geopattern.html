@@ -27,8 +27,9 @@
 &lt;script src="js/geopattern.min.js"&gt;&lt;/script&gt;</code></pre>
 		<p>Use either the <code>GeoPattern</code> browser global or the jQuery plugin:</p>
 		<pre><code class="javascript">// Use the global...
+var element = document.getElementById('geopattern');
 var pattern = GeoPattern.generate('GitHub');
-$('#geopattern').css('background-image', pattern.toDataUrl());
+element.style.backgroundImage = pattern.toDataUrl();
 
 // ...or the plugin
 $('#geopattern').geopattern('GitHub');</code></pre>
@@ -56,7 +57,8 @@ pattern.toDataUrl(); // url("data:image/svg+xml;...</code></pre>
 
 		<h3>Pattern#color</h3>
 		<p>Gets the pattern's background color as a hexadecimal string.</p>
-		<pre><code class="javascript">GeoPattern.generate('GitHub').color // => "#455e8a"</code></pre>
+		<pre><code class="javascript">var pattern = GeoPattern.generate('GitHub');
+pattern.color // => "#455e8a"</code></pre>
 
 		<h3>Pattern#toString() and Pattern#toSvg()</h3>
 		<p>Gets the SVG string representing the pattern.</p>
