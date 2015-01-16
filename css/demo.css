@@ -79,6 +79,7 @@ pre {
 	top: 100%;
 	width: 100%;
 	border-top: 2px solid #121621;
+	box-shadow: 0 0 50px #000;
 }
 
 #fork {
