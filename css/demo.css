@@ -1,33 +1,103 @@
-body, html {
+* {
+	box-sizing: border-box;
+}
+
+html, body {
 	margin: 0;
 	padding: 0;
 	width: 100%;
 	height: 100%;
-	font-size: 30pt;
-	background: #7f7f7f;
+	overflow-x: hidden;
+	overflow-y: auto;
 }
 
-.js-geopattern,
-#string {
+body {
+	position: relative;
+	perspective: 1px;
+	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-size: 18px;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+pre, code {
+	font-size: 16px;
+}
+
+p code {
+	background: #f0f0f0;
+	padding: 2px;
+}
+
+pre {
+	border-top: 5px solid #121621;
+}
+
+#demo {
+	background: #7f7f7f;
 	position: absolute;
 	top: 0;
 	left: 0;
 	width: 100%;
 	height: 100%;
-	margin: 0;
-	padding: 0;
+	transform: translateZ(-1px) scale(2);
 }
 
-input {
+#demo > * {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+
+#string {
 	text-align: center;
 	color: #f7f7f7;
 	background: rgba(0, 0, 0, 0);
 	border: 0;
 	outline: 0;
-	font-size: inherit;
+	font-size: 30pt;
+	line-height: 40pt;
 	text-shadow: 0 0 5px rgba(255, 255, 255, 0.75);
 }
 
-input::-ms-clear {
+#string::-ms-clear {
 	display: none;
+}
+
+#docs {
+	background: #fff;
+	padding: 30pt 15pt;
+	position: absolute;
+	top: 100%;
+	width: 100%;
+	border-top: 2px solid #121621;
+}
+
+#fork {
+	position: absolute;
+	top: 0;
+	right: 0;
+	border: 0;
+}
+
+/*#docs > :first-child {
+	margin-top: 0;
+}
+
+#docs > :last-child {
+	margin-bottom: 0;
+}*/
+
+#docs > * {
+	max-width: 720px;
+	margin-left: auto;
+	margin-right: auto;
 }

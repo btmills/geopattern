@@ -1,3 +1,26 @@
+(function () {
+
+'use strict';
+
+hljs.initHighlighting();
+
+var setAccentColor = (function () {
+	var targets = {
+		color: $('a, .hljs-string, .hljs-value'),
+		borderTopColor: $('pre, #docs')
+	};
+
+	console.log(targets);
+
+	return function (color) {
+		Object.keys(targets).forEach(function (property) {
+			var args = {};
+			args[property] = color;
+			targets[property].stop().animate(args, fadeOptions);
+		});
+	};
+}());
+
 var next = (function () {
 	var which = 0;
 	return function () {
@@ -35,19 +58,21 @@ var fadeOptions = {
 
 var changeEvent = onChange($('#string'), function (val) {
 	var bg = next();
+	var pattern = GeoPattern.generate(val);
 	$('#bg-' + bg.next)
-		.geopattern(val)
+		.css('background-image', pattern.toDataUrl())
 		.stop()
 		.fadeIn(fadeOptions);
 	$('#bg-' + bg.prev)
 		.stop()
 		.fadeOut(fadeOptions);
+	setAccentColor(pattern.color);
 });
 
 // Some browsers persist field values between refresh
-$(function () {
-	$('#string')
-		.val('  start typing...  ')
-		.focus();
-	changeEvent.trigger();
-});
+$('#string')
+	.val('  start typing...  ')
+	.focus();
+changeEvent.trigger();
+
+}());
