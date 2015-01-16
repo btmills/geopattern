@@ -13,6 +13,7 @@ html, body {
 
 body {
 	position: relative;
+	-webkit-perspective: 1px;
 	perspective: 1px;
 	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 	font-size: 18px;
@@ -46,6 +47,7 @@ pre {
 	left: 0;
 	width: 100%;
 	height: 100%;
+	-webkit-transform: translateZ(-1px) scale(2);
 	transform: translateZ(-1px) scale(2);
 }
 
