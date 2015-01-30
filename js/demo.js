@@ -33,15 +33,41 @@ var fadeOptions = {
 	queue: false
 };
 
+var canvas = document.createElement('canvas');
+var saveButton = document.getElementById('save');
+
+function prepareDownload(string, pattern) {
+	if (!canvas) {
+		canvas = document.createElement('canvas');
+	}
+
+	var ctx = canvas.getContext('2d');
+	var img = new Image();
+
+	img.onload = function() {
+		canvas.width = this.width;
+		canvas.height = this.height;
+		ctx.drawImage(img, 0, 0);
+		saveButton.download = string + '.png';
+		saveButton.href = canvas.toDataURL('image/png');
+	};
+
+	img.src = pattern.toDataUri();
+}
+
 var changeEvent = onChange($('#string'), function (val) {
+	var pattern = GeoPattern.generate(val);
+
 	var bg = next();
 	$('#bg-' + bg.next)
-		.geopattern(val)
+		.css('background-image', pattern.toDataUrl())
 		.stop()
 		.fadeIn(fadeOptions);
 	$('#bg-' + bg.prev)
 		.stop()
 		.fadeOut(fadeOptions);
+
+	prepareDownload(val, pattern);
 });
 
 // Some browsers persist field values between refresh
