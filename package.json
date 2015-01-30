@@ -30,15 +30,15 @@
     "object.assign": "^1.1.1"
   },
   "devDependencies": {
-    "browserify": "~3.30.1",
-    "eslint": "^0.10.0",
-    "gulp": "~3.5.2",
-    "gulp-6to5": "^2.0.0",
-    "gulp-browserify": "~0.4.6",
-    "gulp-concat": "^2.1.7",
-    "gulp-plumber": "^0.5.6",
-    "gulp-uglify": "~0.2.1",
-    "mocha": "^2.0.1",
+    "browserify": "^8.1.1",
+    "eslint": "^0.13.0",
+    "gulp": "^3.8.10",
+    "gulp-6to5": "^3.0.0",
+    "gulp-browserify": "^0.5.1",
+    "gulp-concat": "^2.4.3",
+    "gulp-plumber": "^0.6.6",
+    "gulp-uglify": "^1.1.0",
+    "mocha": "^2.1.0",
     "xml-parser": "^1.2.0"
   }
 }
