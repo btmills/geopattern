@@ -28,7 +28,7 @@ For backwards compatibility with the script on the [Guides](http://guides.github
 
 To run on Internet Explorer 9, the GeoPattern script requires polyfills for [`window.btoa()`](https://github.com/btmills/geopattern/blob/gh-pages/js/base64.min.js) and [`Uint32Array`](https://github.com/btmills/geopattern/blob/gh-pages/js/typedarray.js).
 
-View [`geopattern.html`](https://github.com/btmills/geopattern/blob/gh-pages/geopattern.html) for a complete example.
+View [`index.html` on the `gh-pages` branch](https://github.com/btmills/geopattern/blob/gh-pages/index.html) for a complete example.
 
 ### Node.js
 
