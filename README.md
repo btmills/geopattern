@@ -26,6 +26,8 @@ $('#geopattern').geopattern('GitHub');
 
 For backwards compatibility with the script on the [Guides](http://guides.github.com/), the source hash for generation can be supplied with a `data-title-sha` attribute on the element. If the attribute exists, the generator will ignore the input string and use the supplied hash.
 
+To run on Internet Explorer 9, the GeoPattern script requires polyfills for [`window.btoa()`](https://github.com/btmills/geopattern/blob/gh-pages/js/base64.min.js) and [`Uint32Array`](https://github.com/btmills/geopattern/blob/gh-pages/js/typedarray.js).
+
 View [`geopattern.html`](https://github.com/btmills/geopattern/blob/gh-pages/geopattern.html) for a complete example.
 
 ### Node.js
