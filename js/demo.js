@@ -49,7 +49,12 @@ function prepareDownload(string, pattern) {
 		canvas.height = this.height;
 		ctx.drawImage(img, 0, 0);
 		saveButton.download = string + '.png';
-		saveButton.href = canvas.toDataURL('image/png');
+		try {
+			saveButton.href = canvas.toDataURL('image/png');
+		} catch (err) {
+			// The above is a security error in IE, so hide the save button
+			saveButton.style.display = 'none';
+		}
 	};
 
 	img.src = pattern.toDataUri();
