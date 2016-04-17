@@ -6,11 +6,17 @@ This is a JavaScript port of [jasonlong/geo_pattern](https://github.com/jasonlon
 
 ### Web
 
-Include the [minified script](js/geopattern.min.js). jQuery is optional.
+Include the [minified script](js/geopattern.min.js) from your server. jQuery is optional.
 
 ```HTML
 <script src="js/jquery.min.js"></script> <!-- optional -->
 <script src="js/geopattern.min.js"></script>
+```
+
+Or download it from the [CDN] (https://cdnjs.com/libraries/geopattern)
+```HTML
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script> <!-- optional -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
 ```
 
 Use either the `GeoPattern` browser global or the jQuery plugin:
