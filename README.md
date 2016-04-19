@@ -6,22 +6,23 @@ This is a JavaScript port of [jasonlong/geo_pattern](https://github.com/jasonlon
 
 ### Web
 
-Include the [minified script](js/geopattern.min.js) from your server. jQuery is optional.
+Include the [minified script](https://github.com/btmills/geopattern/releases/download/v1.2.3/geopattern-1.2.3.min.js) from your server. jQuery is optional.
 
-```HTML
+```html
 <script src="js/jquery.min.js"></script> <!-- optional -->
 <script src="js/geopattern.min.js"></script>
 ```
 
-Or download it from the [CDN] (https://cdnjs.com/libraries/geopattern)
-```HTML
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script> <!-- optional -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+Or reference it from a [CDN](https://cdnjs.com/libraries/geopattern).
+
+```html
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script> <!-- optional -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
 ```
 
 Use either the `GeoPattern` browser global or the jQuery plugin:
 
-```JavaScript
+```js
 // Use the global...
 var pattern = GeoPattern.generate('GitHub');
 $('#geopattern').css('background-image', pattern.toDataUrl());
