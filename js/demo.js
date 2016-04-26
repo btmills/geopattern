@@ -7,7 +7,7 @@ hljs.initHighlighting();
 var setAccentColor = (function () {
 	var targets = {
 		color: $('#docs a, .hljs-string, .hljs-value'),
-		borderTopColor: $('pre, #docs'),
+		borderColor: $('.hljs '),
 		backgroundColor: $('#tagline')
 	};
 

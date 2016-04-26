@@ -17,13 +17,15 @@
 		GeoPattern generates beautiful SVG patterns.
 	</div>
 	<div id="docs">
-		<h1>GeoPattern</h1>
+		<h1>
+			GeoPattern
+		</h1>
 
 		<p>This is a JavaScript port of <a href="https://github.com/jasonlong/geo_pattern">jasonlong/geo_pattern</a> with a <a href="#">live preview page</a> and is derived from the background generator originally used for <a href="http://guides.github.com/">GitHub Guides</a>.</p>
 
-		<h2>Usage</h2>
+		<h2 id="usage">Usage</h2>
 
-		<h3>Web</h3>
+		<h3 id="usage-web">Web</h3>
 
 		<p>Include the <a href="https://github.com/btmills/geopattern/releases/latest">minified script</a>. jQuery is optional.</p>
 		<pre><code class="html">&lt;script src="js/jquery.min.js"&gt;&lt;/script&gt; &lt;!-- optional --&gt;
@@ -38,7 +40,7 @@ element.style.backgroundImage = pattern.toDataUrl();
 $('#geopattern').geopattern('GitHub');</code></pre>
 		<p>For backwards compatibility with the script on the <a href="http://guides.github.com/">Guides</a>, the source hash for generation can be supplied with a <code>data-title-sha</code> attribute on the element. If the attribute exists, the generator will ignore the input string and use the supplied hash.</p>
 
-		<h3>Node.js</h3>
+		<h3 id="usage-nodejs">Node.js</h3>
 
 		<pre><code class="bash">npm install geopattern</code></pre>
 		<p>After requiring <code>geopattern</code>, the API is identical to the browser version, minus the jQuery plugin.</p>
@@ -46,36 +48,38 @@ $('#geopattern').geopattern('GitHub');</code></pre>
 var pattern = GeoPattern.generate('GitHub');
 pattern.toDataUrl(); // url("data:image/svg+xml;...</code></pre>
 
-		<h2>API</h2>
+		<h2 id="api">API</h2>
 
-		<h3>GeoPattern::generate(string, options)</h3>
+		<h3 id="api-geopattern-generate">GeoPattern::generate(string, options)</h3>
 
 		<p>Returns a newly-generated Pattern instance.</p>
 		<ul>
 			<li><p><code>string</code> will be hashed using the SHA1 algorith, and the resulting hash will be used as the seed for generation.</p></li>
 			<li><p><code>options.color</code> specifies an exact background color. This is a CSS hexadecimal color value.</p></li>
 			<li><p><code>options.baseColor</code> controls the relative background color of the generated image. The color is not identical to that used in the pattern because the hue is rotated by the generator. This is a CSS hexadecimal color value, which defaults to <code>#933c3c</code>.</p></li>
-			<li><p><code>options.generator</code> determins the pattern. <a href="https://github.com/jasonlong/geo_pattern#available-patterns">All of the original patterns</a> are available in this port, and their names are camelCased.</p></li>
+			<li><p><code>options.generator</code> determines the pattern. <a href="https://github.com/jasonlong/geo_pattern#available-patterns">All of the original patterns</a> are available in this port, and their names are camelCased.</p></li>
 		</ul>
 
-		<h3>Pattern#color</h3>
+		<h3 id="api-pattern-color">Pattern#color</h3>
+
 		<p>Gets the pattern's background color as a hexadecimal string.</p>
 		<pre><code class="javascript">var pattern = GeoPattern.generate('GitHub');
 pattern.color // => "#455e8a"</code></pre>
 
-		<h3>Pattern#toString() and Pattern#toSvg()</h3>
+		<h3 id="api-pattern-tostring">Pattern#toString() and Pattern#toSvg()</h3>
+
 		<p>Gets the SVG string representing the pattern.</p>
 
-		<h3>Pattern#toBase64()</h3>
+		<h3 id="api-pattern-tobase64">Pattern#toBase64()</h3>
 		<p>Gets the SVG as a Base64-encoded string.</p>
 
-		<h3>Pattern#toDataUri()</h3>
+		<h3 id="api-pattern-todatauri">Pattern#toDataUri()</h3>
 		<p>Gets the pattern as a data URI, i.e. <code>data:image/svg+xml;base64,PHN2ZyB...</code>.</p>
 
-		<h3>Pattern#toDataUrl()</h3>
+		<h3 id="api-pattern-todataurl">Pattern#toDataUrl()</h3>
 		<p>Gets the pattern as a data URL suitable for use as a CSS <code>background-image</code>, i.e. <code>url("data:image/svg+xml;base64,PHN2ZyB...")</code>.</p>
 
-		<h2>License</h2>
+		<h2 id="license">License</h2>
 		<p>Licensed under the terms of the MIT license, the full text of which can be read in <a href="https://github.com/btmills/geopattern/blob/master/LICENSE">LICENSE</a>.</p>
 	</div>
 

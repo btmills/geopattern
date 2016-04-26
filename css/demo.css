@@ -1,3 +1,6 @@
+/*@import url(https://fonts.googleapis.com/css?family=Fira+Mono|Fira+Sans);*/
+@import url(https://fonts.googleapis.com/css?family=Roboto:300,400,500);
+
 * {
 	box-sizing: border-box;
 }
@@ -10,9 +13,31 @@ html, body {
 }
 
 body {
-	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-	font-size: 16px;
-	line-height: 150%;
+	color: rgba(0, 0, 0, 0.9);
+	/*font-family: 'Fira Sans', sans-serif;*/
+	font-family: Roboto, sans-serif;
+	/*font-size: 16px;*/
+	font-size: 1em;
+	font-weight: 400;
+	line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5 {
+	color: #333;
+	font-weight: 500;
+	margin: 2em 0 0.5em;
+}
+
+h2 + h3 {
+	margin-top: 1em;
+}
+
+p {
+	margin: 0.5em 0;
+}
+
+ul {
+	padding-left: 25px;
 }
 
 a {
@@ -23,17 +48,30 @@ a:hover {
 	text-decoration: underline;
 }
 
-pre {
-	border-top: 3px solid #121621;
+code {
+	border-radius: 3px;
+	/*font-family: 'Fira Mono', monospace;*/
+	font-family: Courier, monospace;
+	/*font-size: .85em;*/
+	font-size: 14px;
+	/*padding: 0.2em 0;*/
+	padding: 0.5em;
+	/*background: rgba(0, 0, 0, 0.04);*/
+	background: #f8f8f8;
 }
 
-code {
-	background: #f0f0f0;
-	padding: 2px;
+pre {
+	line-height: 1.45;
+	margin: 2em 0;
+}
+
+p code {
+	padding: 4px;
 }
 
 .hljs {
-	font-size: .85em;
+	background: #f8f8f8;
+	border-left: 3px solid #121621;
 }
 
 #demo {
@@ -53,12 +91,12 @@ code {
 
 #string {
 	text-align: center;
-	color: #f7f7f7;
+	color: rgba(255, 255, 255, 0.9);
 	background: rgba(0, 0, 0, 0);
 	border: 0;
 	outline: 0;
-	font-size: 30pt;
-	line-height: 40pt;
+	font-size: 48px;
+	font-weight: 300;
 }
 
 #string::-ms-clear {
@@ -67,21 +105,17 @@ code {
 
 #tagline {
 	color: white;
-	font-family: Georgia, serif;
-	font-style: italic;
-	font-size: 1.8em;
+	font-size: 2em;
 	text-align: center;
 	padding: 20px;
-	font-weight: 200;
-	box-shadow: 0 0 50px #000;
+	font-weight: 300;
 }
 
 #docs {
 	z-index: 10;
 	background: #fff;
-	padding: 30pt 15pt;
+	padding: 48px 24px;
 	width: 100%;
-	border-top: 2px solid #121621;
 }
 
 #fork {
@@ -91,16 +125,16 @@ code {
 	border: 0;
 }
 
-/*#docs > :first-child {
+#docs > :first-child {
 	margin-top: 0;
 }
 
 #docs > :last-child {
 	margin-bottom: 0;
-}*/
+}
 
 #docs > * {
-	max-width: 640px;
+	max-width: 720px;
 	margin-left: auto;
 	margin-right: auto;
 }
