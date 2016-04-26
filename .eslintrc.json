@@ -1,0 +1,26 @@
+{
+	"root": true,
+
+	"extends": "@btmills/eslint-config-btmills/es5",
+
+	"env": {
+		"jquery": true,
+		"node": true
+	},
+
+	"globals": {
+		"Uint32Array": false
+	},
+
+	"rules": {
+		"no-multi-spaces": ["error", {
+			"exceptions": {
+				"AssignmentExpression": true,
+				"VariableDeclarator": true
+			}
+		}],
+
+		"complexity": "off",
+		"no-param-reassign": "off"
+	}
+}

@@ -16,8 +16,8 @@
     "Jason Long"
   ],
   "files": [
-      "index.js",
-      "lib/*.js"
+    "index.js",
+    "lib/*.js"
   ],
   "main": "index.js",
   "repository": "btmills/geopattern",
@@ -30,8 +30,9 @@
     "extend": "~1.2.1"
   },
   "devDependencies": {
+    "@btmills/eslint-config-btmills": "^1.0.0-beta.5",
     "browserify": "~3.30.1",
-    "eslint": "^0.10.0",
+    "eslint": "^2.8.0",
     "gulp": "~3.5.2",
     "gulp-browserify": "~0.4.6",
     "gulp-concat": "^2.1.7",

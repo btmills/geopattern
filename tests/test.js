@@ -63,12 +63,18 @@ describe('GeoPattern', function () {
 });
 
 GENERATORS.forEach(function (generator) {
-	describe(generator, function () {
-		it('should generate the correct SVG string', function () {
-			assert.deepEqual(
-				parse(GeoPattern.generate(generator, { generator: generator }).toString()),
-				parse(fs.readFileSync(path.join(ASSET_DIR, generator + '.svg'), 'utf8'))
-			);
+	fs.readFile(path.join(ASSET_DIR, generator + '.svg'), 'utf8', function (err, expected) {
+		if (err) {
+			throw err;
+		}
+
+		describe(generator, function () {
+			it('should generate the correct SVG string', function () {
+				assert.deepEqual(
+					parse(GeoPattern.generate(generator, { generator: generator }).toString()),
+					parse(expected)
+				);
+			});
 		});
 	});
 });
