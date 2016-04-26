@@ -15,15 +15,16 @@
     "Brandon Mills",
     "Jason Long"
   ],
+  "files": [
+      "index.js",
+      "lib/*.js"
+  ],
   "main": "index.js",
+  "repository": "btmills/geopattern",
   "scripts": {
-    "lint": "node node_modules/eslint/bin/eslint.js .",
-    "mocha": "node node_modules/mocha/bin/mocha tests",
+    "lint": "eslint .",
+    "mocha": "mocha tests",
     "test": "npm run lint && npm run mocha"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/btmills/geopattern"
   },
   "dependencies": {
     "extend": "~1.2.1"
