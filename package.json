@@ -14,12 +14,13 @@
   "contributors": [
     "Brandon Mills",
     "Jason Long"
+    "Jannis R <mail@jannisr.de>"
   ],
-  "main": "index.js",
+  "main": "lib/index.js",
   "files": ["index.js", "lib/*js"],
   "scripts": {
-    "lint": "node node_modules/eslint/bin/eslint.js .",
-    "mocha": "node node_modules/mocha/bin/mocha tests",
+    "lint": "eslint .",
+    "mocha": "mocha tests",
     "test": "npm run lint && npm run mocha"
   },
   "repository": {
