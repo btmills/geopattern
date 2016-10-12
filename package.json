@@ -13,7 +13,7 @@
   "license": "MIT",
   "contributors": [
     "Brandon Mills",
-    "Jason Long"
+    "Jason Long",
     "Jannis R <mail@jannisr.de>"
   ],
   "main": "lib/index.js",
