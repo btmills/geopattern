@@ -16,11 +16,16 @@
     "Jason Long"
   ],
   "main": "index.js",
-  "files": ["index.js", "lib/*.js"],
+  "files": [
+    "index.js",
+    "lib/*.js"
+  ],
   "scripts": {
     "lint": "eslint .",
     "mocha": "mocha tests",
-    "test": "npm run lint && npm run mocha"
+    "test": "npm run lint && npm run mocha",
+    "build": "browserify -s GeoPattern -i buffer . | uglifyjs -mc --screw-ie8 > js/geopattern.min.js",
+    "watch": "watchify -s GeoPattern -i buffer . -o js/geopattern.js"
   },
   "repository": {
     "type": "git",
@@ -30,14 +35,11 @@
     "extend": "~1.2.1"
   },
   "devDependencies": {
-    "browserify": "~3.30.1",
+    "browserify": "^13.1.1",
     "eslint": "^0.10.0",
-    "gulp": "~3.5.2",
-    "gulp-browserify": "~0.4.6",
-    "gulp-concat": "^2.1.7",
-    "gulp-plumber": "^0.5.6",
-    "gulp-uglify": "~0.2.1",
     "mocha": "^2.0.1",
-    "xml-parser": "^1.2.0"
+    "uglify-js": "^2.7.5",
+    "watchify": "^3.7.0",
+    "xml-parser": "^1.2.1"
   }
 }
