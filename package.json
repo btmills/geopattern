@@ -16,6 +16,7 @@
     "Jason Long"
   ],
   "main": "index.js",
+  "files": ["index.js", "lib/*.js"],
   "scripts": {
     "lint": "eslint .",
     "mocha": "mocha tests",
