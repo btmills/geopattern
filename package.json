@@ -15,9 +15,8 @@
     "Brandon Mills",
     "Jason Long"
   ],
-  "main": "index.js",
+  "main": "lib/index.js",
   "files": [
-    "index.js",
     "lib/*.js"
   ],
   "scripts": {
