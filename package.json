@@ -13,13 +13,16 @@
   "license": "MIT",
   "contributors": [
     "Brandon Mills",
-    "Jason Long"
+    "Jason Long",
+    "Jannis R <mail@jannisr.de>"
   ],
-  "main": "index.js",
+  "main": "lib/index.js",
+  "files": ["index.js", "lib/*js"],
   "scripts": {
-    "lint": "node node_modules/eslint/bin/eslint.js .",
-    "mocha": "node node_modules/mocha/bin/mocha tests",
-    "test": "npm run lint && npm run mocha"
+    "lint": "eslint .",
+    "mocha": "mocha tests",
+    "test": "npm run lint && npm run mocha",
+  	"build": "browserify -s GeoPattern -i buffer . | uglifyjs -mc --screw-ie8 > js/geopattern.min.js"
   },
   "repository": {
     "type": "git",
@@ -37,6 +40,8 @@
     "gulp-plumber": "^1.1",
     "gulp-uglify": "^2",
     "mocha": "^3.0.2",
-    "xml-parser": "^1.2.1"
+    "xml-parser": "^1.2.1",
+    "browserify": "^13.1",
+    "uglify-js": "^2.7.3"
   }
 }
