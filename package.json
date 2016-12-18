@@ -34,8 +34,9 @@
     "object-assign": "^4.1.0"
   },
   "devDependencies": {
+    "@btmills/eslint-config-btmills": "^3.0.0-beta.3",
     "browserify": "^13.1.1",
-    "eslint": "^0.10.0",
+    "eslint": "^3.12.0",
     "mocha": "^2.0.1",
     "uglify-js": "^2.7.5",
     "watchify": "^3.7.0",

@@ -1,5 +1,3 @@
-/* eslint-env mocha */
-
 'use strict';
 
 var fs = require('fs');
@@ -67,7 +65,7 @@ GENERATORS.forEach(function (generator) {
 		it('should generate the correct SVG string', function () {
 			assert.deepEqual(
 				parse(GeoPattern.generate(generator, { generator: generator }).toString()),
-				parse(fs.readFileSync(path.join(ASSET_DIR, generator + '.svg'), 'utf8'))
+				parse(fs.readFileSync(path.join(ASSET_DIR, generator + '.svg'), 'utf8')) // eslint-disable-line no-sync
 			);
 		});
 	});
