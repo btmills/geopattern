@@ -1,5 +1,9 @@
 # GeoPattern
 
+[![npm version][npm-image]][npm-url]
+[![build status][travis-image]][travis-url]
+[![downloads][downloads-image]][npm-url]
+
 This is a JavaScript port of [jasonlong/geo_pattern](https://github.com/jasonlong/geo_pattern) with a [live preview page](http://btmills.github.io/geopattern/) and is derived from the background generator originally used for [GitHub Guides](http://guides.github.com/).
 
 ## Usage
@@ -92,3 +96,10 @@ Gets the pattern as a data URL suitable for use as a CSS `background-image`, i.e
 ## License
 
 Licensed under the terms of the MIT License, the full text of which can be read in [LICENSE](LICENSE).
+
+
+[downloads-image]: https://img.shields.io/npm/dm/geopattern.svg?style=flat-square
+[npm-image]: https://img.shields.io/npm/v/geopattern.svg?style=flat-square
+[npm-url]: https://www.npmjs.com/package/geopattern
+[travis-image]: https://img.shields.io/travis/btmills/geopattern/master.svg?style=flat-square
+[travis-url]: https://travis-ci.org/btmills/geopattern
