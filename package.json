@@ -35,8 +35,8 @@
   },
   "devDependencies": {
     "browserify": "^13.1.1",
-    "eslint": "^0.10.0",
-    "mocha": "^2.0.1",
+    "eslint": "^3.12.1",
+    "mocha": "^3.2.0",
     "uglify-js": "^2.7.5",
     "watchify": "^3.7.0",
     "xml-parser": "^1.2.1"
