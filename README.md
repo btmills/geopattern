@@ -55,6 +55,9 @@ var pattern = GeoPattern.generate('GitHub');
 pattern.toDataUrl(); // url("data:image/svg+xml;...
 ```
 
+PS - If you are going to use **Webpack** (or any other bundler) to bundle `geopattern` and it will be used in a browser, ignore `buffer` shim from the bundling to decrease its size. See [#32](https://github.com/btmills/geopattern/issues/32) for more details. 
+
+
 ### API
 
 #### GeoPattern.generate(string, options)
