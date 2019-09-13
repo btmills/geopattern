@@ -1,5 +1,5 @@
 {
-  "name": "geopattern",
+  "name": "@dougmorin0/geopattern",
   "version": "1.2.4",
   "description": "Generate beautiful SVG patterns",
   "publishConfig": {
@@ -12,7 +12,9 @@
     "background"
   ],
   "homepage": "http://btmills.github.io/geopattern/",
-  "bugs": "https://github.com/btmills/geopattern/issues",
+  "bugs": {
+    "url": "https://github.com/btmills/geopattern/issues"
+  },
   "license": "MIT",
   "contributors": [
     "Brandon Mills",
@@ -43,5 +45,10 @@
     "uglify-js": "^2.7.5",
     "watchify": "^3.7.0",
     "xml-parser": "^1.2.1"
-  }
+  },
+  "directories": {
+    "lib": "lib",
+    "test": "tests"
+  },
+  "author": ""
 }
