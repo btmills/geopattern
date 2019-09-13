@@ -1,3 +1,127 @@
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.GeoPattern = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
+/*eslint sort-vars:0, curly:0*/
+
+'use strict';
+
+/**
+ * Converts a hex CSS color value to RGB.
+ * Adapted from http://stackoverflow.com/a/5624139.
+ *
+ * @param	String	hex		The hexadecimal color value
+ * @return	Object			The RGB representation
+ */
+function hex2rgb(hex) {
+	// Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
+	var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+	hex = hex.replace(shorthandRegex, function (m, r, g, b) {
+		return r + r + g + g + b + b;
+	});
+
+	var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+	return result ? {
+		r: parseInt(result[1], 16),
+		g: parseInt(result[2], 16),
+		b: parseInt(result[3], 16)
+	} : null;
+}
+
+/**
+ * Converts an RGB color value to a hex string.
+ * @param  Object rgb RGB as r, g, and b keys
+ * @return String     Hex color string
+ */
+function rgb2hex(rgb) {
+	return '#' + ['r', 'g', 'b'].map(function (key) {
+		return ('0' + rgb[key].toString(16)).slice(-2);
+	}).join('');
+}
+
+/**
+ * Converts an RGB color value to HSL. Conversion formula adapted from
+ * http://en.wikipedia.org/wiki/HSL_color_space. This function adapted
+ * from http://stackoverflow.com/a/9493060.
+ * Assumes r, g, and b are contained in the set [0, 255] and
+ * returns h, s, and l in the set [0, 1].
+ *
+ * @param   Object  rgb     RGB as r, g, and b keys
+ * @return  Object          HSL as h, s, and l keys
+ */
+function rgb2hsl(rgb) {
+	var r = rgb.r, g = rgb.g, b = rgb.b;
+	r /= 255; g /= 255; b /= 255;
+	var max = Math.max(r, g, b), min = Math.min(r, g, b);
+	var h, s, l = (max + min) / 2;
+
+	if (max === min) {
+		h = s = 0; // achromatic
+	} else {
+		var d = max - min;
+		s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+		switch (max) {
+			case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+			case g: h = (b - r) / d + 2; break;
+			case b: h = (r - g) / d + 4; break;
+		}
+		h /= 6;
+	}
+
+	return { h: h, s: s, l: l };
+}
+
+/**
+ * Converts an HSL color value to RGB. Conversion formula adapted from
+ * http://en.wikipedia.org/wiki/HSL_color_space. This function adapted
+ * from http://stackoverflow.com/a/9493060.
+ * Assumes h, s, and l are contained in the set [0, 1] and
+ * returns r, g, and b in the set [0, 255].
+ *
+ * @param   Object  hsl     HSL as h, s, and l keys
+ * @return  Object          RGB as r, g, and b values
+ */
+function hsl2rgb(hsl) {
+
+	function hue2rgb(p, q, t) {
+		if (t < 0) t += 1;
+		if (t > 1) t -= 1;
+		if (t < 1 / 6) return p + (q - p) * 6 * t;
+		if (t < 1 / 2) return q;
+		if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+		return p;
+	}
+
+	var h = hsl.h, s = hsl.s, l = hsl.l;
+	var r, g, b;
+
+	if(s === 0){
+		r = g = b = l; // achromatic
+	}else{
+
+		var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+		var p = 2 * l - q;
+		r = hue2rgb(p, q, h + 1 / 3);
+		g = hue2rgb(p, q, h);
+		b = hue2rgb(p, q, h - 1 / 3);
+	}
+
+	return {
+		r: Math.round(r * 255),
+		g: Math.round(g * 255),
+		b: Math.round(b * 255)
+	};
+}
+
+module.exports = {
+	hex2rgb: hex2rgb,
+	rgb2hex: rgb2hex,
+	rgb2hsl: rgb2hsl,
+	hsl2rgb: hsl2rgb,
+	rgb2rgbString: function (rgb) {
+		return 'rgb(' + [rgb.r, rgb.g, rgb.b].join(',') + ')';
+	}
+};
+
+},{}],2:[function(require,module,exports){
+(function (Buffer){
 'use strict';
 
 var assign = require('object-assign');
@@ -1378,3 +1502,524 @@ Pattern.prototype.geoTessellation = function () {
 		}
 	}
 };
+
+}).call(this,require("buffer").Buffer)
+},{"./color":1,"./sha1":3,"./svg":4,"buffer":7,"object-assign":6}],3:[function(require,module,exports){
+/*
+https://github.com/creationix/git-sha1/blob/master/git-sha1.js
+
+The MIT License (MIT)
+
+Copyright (c) 2013 Tim Caswell
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*/
+
+'use strict';
+
+// A streaming interface for when nothing is passed in.
+function create() {
+
+	var h0 = 0x67452301;
+	var h1 = 0xEFCDAB89;
+	var h2 = 0x98BADCFE;
+	var h3 = 0x10325476;
+	var h4 = 0xC3D2E1F0;
+	// The first 64 bytes (16 words) is the data chunk
+	var block = new Uint32Array(80), offset = 0, shift = 24;
+	var totalLength = 0;
+
+	// We have a full block to process.  Let's do it!
+	function processBlock() {
+		// Extend the sixteen 32-bit words into eighty 32-bit words:
+		for (var i = 16; i < 80; i++) {
+			var w = block[i - 3] ^ block[i - 8] ^ block[i - 14] ^ block[i - 16];
+			block[i] = (w << 1) | (w >>> 31);
+		}
+
+		// log(block);
+
+		// Initialize hash value for this chunk:
+		var a = h0;
+		var b = h1;
+		var c = h2;
+		var d = h3;
+		var e = h4;
+		var f, k;
+
+		// Main loop:
+		for (i = 0; i < 80; i++) {
+			if (i < 20) {
+				f = d ^ (b & (c ^ d));
+				k = 0x5A827999;
+			} else if (i < 40) {
+				f = b ^ c ^ d;
+				k = 0x6ED9EBA1;
+			} else if (i < 60) {
+				f = (b & c) | (d & (b | c));
+				k = 0x8F1BBCDC;
+			} else {
+				f = b ^ c ^ d;
+				k = 0xCA62C1D6;
+			}
+			var temp = (a << 5 | a >>> 27) + f + e + k + (block[i] | 0);
+			e = d;
+			d = c;
+			c = (b << 30 | b >>> 2);
+			b = a;
+			a = temp;
+		}
+
+		// Add this chunk's hash to result so far:
+		h0 = (h0 + a) | 0;
+		h1 = (h1 + b) | 0;
+		h2 = (h2 + c) | 0;
+		h3 = (h3 + d) | 0;
+		h4 = (h4 + e) | 0;
+
+		// The block is now reusable.
+		offset = 0;
+		for (i = 0; i < 16; i++) {
+			block[i] = 0;
+		}
+	}
+
+	function write(byte) {
+		block[offset] |= (byte & 0xff) << shift;
+		if (shift) {
+			shift -= 8;
+		} else {
+			offset++;
+			shift = 24;
+		}
+
+		if (offset === 16) {
+			processBlock();
+		}
+	}
+
+	function updateString(string) {
+		var length = string.length;
+		totalLength += length * 8;
+		for (var i = 0; i < length; i++) {
+			write(string.charCodeAt(i));
+		}
+	}
+
+	// The user gave us more data.  Store it!
+	function update(chunk) {
+		if (typeof chunk === 'string') {
+			return updateString(chunk);
+		}
+		var length = chunk.length;
+		totalLength += length * 8;
+		for (var i = 0; i < length; i++) {
+			write(chunk[i]);
+		}
+	}
+
+	function toHex(word) {
+		var hex = '';
+		for (var i = 28; i >= 0; i -= 4) {
+			hex += ((word >> i) & 0xf).toString(16);
+		}
+		return hex;
+	}
+
+	// No more data will come, pad the block, process and return the result.
+	function digest() {
+		// Pad
+		write(0x80);
+		if (offset > 14 || (offset === 14 && shift < 24)) {
+			processBlock();
+		}
+		offset = 14;
+		shift = 24;
+
+		// 64-bit length big-endian
+		write(0x00); // numbers this big aren't accurate in javascript anyway
+		write(0x00); // ..So just hard-code to zero.
+		write(totalLength > 0xffffffffff ? totalLength / 0x10000000000 : 0x00);
+		write(totalLength > 0xffffffff ? totalLength / 0x100000000 : 0x00);
+		for (var s = 24; s >= 0; s -= 8) {
+			write(totalLength >> s);
+		}
+
+		// At this point one last processBlock() should trigger and we can pull out the result.
+		return toHex(h0) +
+		toHex(h1) +
+		toHex(h2) +
+		toHex(h3) +
+		toHex(h4);
+	}
+
+	return { update: update, digest: digest };
+}
+
+// Input chunks must be either arrays of bytes or "raw" encoded strings
+module.exports = function sha1(buffer) {
+	if (buffer === undefined) {
+		return create();
+	}
+	var shasum = create();
+	shasum.update(buffer);
+	return shasum.digest();
+};
+
+},{}],4:[function(require,module,exports){
+'use strict';
+
+var assign = require('object-assign');
+var XMLNode = require('./xml');
+
+function SVG() {
+	this.width = 100;
+	this.height = 100;
+	this.svg = new XMLNode('svg');
+	this.context = []; // Track nested nodes
+	this.setAttributes(this.svg, {
+		xmlns: 'http://www.w3.org/2000/svg',
+		width: this.width,
+		height: this.height
+	});
+
+	return this;
+}
+
+module.exports = SVG;
+
+// This is a hack so groups work.
+SVG.prototype.currentContext = function () {
+	return this.context[this.context.length - 1] || this.svg;
+};
+
+// This is a hack so groups work.
+SVG.prototype.end = function () {
+	this.context.pop();
+	return this;
+};
+
+SVG.prototype.currentNode = function () {
+	var context = this.currentContext();
+	return context.lastChild || context;
+};
+
+SVG.prototype.transform = function (transformations) {
+	this.currentNode().setAttribute('transform',
+		Object.keys(transformations).map(function (transformation) {
+			return transformation + '(' + transformations[transformation].join(',') + ')';
+		}).join(' ')
+	);
+	return this;
+};
+
+SVG.prototype.setAttributes = function (el, attrs) {
+	Object.keys(attrs).forEach(function (attr) {
+		el.setAttribute(attr, attrs[attr]);
+	});
+};
+
+SVG.prototype.setWidth = function (width) {
+	this.svg.setAttribute('width', Math.floor(width));
+};
+
+SVG.prototype.setHeight = function (height) {
+	this.svg.setAttribute('height', Math.floor(height));
+};
+
+SVG.prototype.toString = function () {
+	return this.svg.toString();
+};
+
+SVG.prototype.rect = function (x, y, width, height, args) {
+	// Accept array first argument
+	var self = this;
+	if (Array.isArray(x)) {
+		x.forEach(function (a) {
+			self.rect.apply(self, a.concat(args));
+		});
+		return this;
+	}
+
+	var rect = new XMLNode('rect');
+	this.currentContext().appendChild(rect);
+	this.setAttributes(rect, assign({
+		x: x,
+		y: y,
+		width: width,
+		height: height
+	}, args));
+
+	return this;
+};
+
+SVG.prototype.circle = function (cx, cy, r, args) {
+	var circle = new XMLNode('circle');
+	this.currentContext().appendChild(circle);
+	this.setAttributes(circle, assign({
+		cx: cx,
+		cy: cy,
+		r: r
+	}, args));
+
+	return this;
+};
+
+SVG.prototype.path = function (str, args) {
+	var path = new XMLNode('path');
+	this.currentContext().appendChild(path);
+	this.setAttributes(path, assign({
+		d: str
+	}, args));
+
+	return this;
+};
+
+SVG.prototype.polyline = function (str, args) {
+	// Accept array first argument
+	var self = this;
+	if (Array.isArray(str)) {
+		str.forEach(function (s) {
+			self.polyline(s, args);
+		});
+		return this;
+	}
+
+	var polyline = new XMLNode('polyline');
+	this.currentContext().appendChild(polyline);
+	this.setAttributes(polyline, assign({
+		points: str
+	}, args));
+
+	return this;
+};
+
+// group and context are hacks
+SVG.prototype.group = function (args) {
+	var group = new XMLNode('g');
+	this.currentContext().appendChild(group);
+	this.context.push(group);
+	this.setAttributes(group, assign({}, args));
+	return this;
+};
+
+},{"./xml":5,"object-assign":6}],5:[function(require,module,exports){
+'use strict';
+
+var XMLNode = module.exports = function (tagName) {
+	if (!(this instanceof XMLNode)) {
+		return new XMLNode(tagName);
+	}
+
+	this.tagName = tagName;
+	this.attributes = Object.create(null);
+	this.children = [];
+	this.lastChild = null;
+
+	return this;
+};
+
+XMLNode.prototype.appendChild = function (child) {
+	this.children.push(child);
+	this.lastChild = child;
+
+	return this;
+};
+
+XMLNode.prototype.setAttribute = function (name, value) {
+	this.attributes[name] = value;
+
+	return this;
+};
+
+XMLNode.prototype.toString = function () {
+	var self = this;
+
+	return [
+		'<',
+		self.tagName,
+		Object.keys(self.attributes).map(function (attr) {
+			return [
+				' ',
+				attr,
+				'="',
+				self.attributes[attr],
+				'"'
+			].join('');
+		}).join(''),
+		'>',
+		self.children.map(function (child) {
+			return child.toString();
+		}).join(''),
+		'</',
+		self.tagName,
+		'>'
+	].join('');
+};
+
+},{}],6:[function(require,module,exports){
+/*
+object-assign
+(c) Sindre Sorhus
+@license MIT
+*/
+
+'use strict';
+/* eslint-disable no-unused-vars */
+var getOwnPropertySymbols = Object.getOwnPropertySymbols;
+var hasOwnProperty = Object.prototype.hasOwnProperty;
+var propIsEnumerable = Object.prototype.propertyIsEnumerable;
+
+function toObject(val) {
+	if (val === null || val === undefined) {
+		throw new TypeError('Object.assign cannot be called with null or undefined');
+	}
+
+	return Object(val);
+}
+
+function shouldUseNative() {
+	try {
+		if (!Object.assign) {
+			return false;
+		}
+
+		// Detect buggy property enumeration order in older V8 versions.
+
+		// https://bugs.chromium.org/p/v8/issues/detail?id=4118
+		var test1 = new String('abc');  // eslint-disable-line no-new-wrappers
+		test1[5] = 'de';
+		if (Object.getOwnPropertyNames(test1)[0] === '5') {
+			return false;
+		}
+
+		// https://bugs.chromium.org/p/v8/issues/detail?id=3056
+		var test2 = {};
+		for (var i = 0; i < 10; i++) {
+			test2['_' + String.fromCharCode(i)] = i;
+		}
+		var order2 = Object.getOwnPropertyNames(test2).map(function (n) {
+			return test2[n];
+		});
+		if (order2.join('') !== '0123456789') {
+			return false;
+		}
+
+		// https://bugs.chromium.org/p/v8/issues/detail?id=3056
+		var test3 = {};
+		'abcdefghijklmnopqrst'.split('').forEach(function (letter) {
+			test3[letter] = letter;
+		});
+		if (Object.keys(Object.assign({}, test3)).join('') !==
+				'abcdefghijklmnopqrst') {
+			return false;
+		}
+
+		return true;
+	} catch (err) {
+		// We don't expect any of the above to throw, but better to be safe.
+		return false;
+	}
+}
+
+module.exports = shouldUseNative() ? Object.assign : function (target, source) {
+	var from;
+	var to = toObject(target);
+	var symbols;
+
+	for (var s = 1; s < arguments.length; s++) {
+		from = Object(arguments[s]);
+
+		for (var key in from) {
+			if (hasOwnProperty.call(from, key)) {
+				to[key] = from[key];
+			}
+		}
+
+		if (getOwnPropertySymbols) {
+			symbols = getOwnPropertySymbols(from);
+			for (var i = 0; i < symbols.length; i++) {
+				if (propIsEnumerable.call(from, symbols[i])) {
+					to[symbols[i]] = from[symbols[i]];
+				}
+			}
+		}
+	}
+
+	return to;
+};
+
+},{}],7:[function(require,module,exports){
+
+},{}],8:[function(require,module,exports){
+(function ($) {
+
+'use strict';
+
+var Pattern = require('./pattern');
+
+/*
+ * Normalize arguments, if not given, to:
+ * string: (new Date()).toString()
+ * options: {}
+ */
+function optArgs(cb) {
+	return function (string, options) {
+		if (typeof string === 'object') {
+			options = string;
+			string = null;
+		}
+		if (string === null || string === undefined) {
+			string = (new Date()).toString();
+		}
+		if (!options) {
+			options = {};
+		}
+
+		return cb.call(this, string, options);
+	};
+}
+
+var GeoPattern = module.exports = {
+	generate: optArgs(function (string, options) {
+		return new Pattern(string, options);
+	})
+};
+
+if ($) {
+
+	// If jQuery, add plugin
+	$.fn.geopattern = optArgs(function (string, options) {
+		return this.each(function () {
+			var titleSha = $(this).attr('data-title-sha');
+			if (titleSha) {
+				options = $.extend({
+					hash: titleSha
+				}, options);
+			}
+			var pattern = GeoPattern.generate(string, options);
+			$(this).css('background-image', pattern.toDataUrl());
+		});
+	});
+
+}
+
+}(typeof jQuery !== 'undefined' ? jQuery : null));
+
+},{"./pattern":2}]},{},[8])(8)
+});

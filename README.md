@@ -55,7 +55,7 @@ var pattern = GeoPattern.generate('GitHub');
 pattern.toDataUrl(); // url("data:image/svg+xml;...
 ```
 
-PS - If you are going to use **Webpack** (or any other bundler) to bundle `geopattern` and it will be used in a browser, ignore `buffer` shim from the bundling to decrease its size. See [#32](https://github.com/btmills/geopattern/issues/32) for more details. 
+PS - If you are going to use **Webpack** (or any other bundler) to bundle `geopattern` and it will be used in a browser, ignore `buffer` shim from the bundling to decrease its size. See [#32](https://github.com/btmills/geopattern/issues/32) for more details.
 
 
 ### API
@@ -71,6 +71,8 @@ Returns a newly-generated, tiling SVG Pattern.
 - `options.baseColor` Controls the relative background color of the generated image. The color is not identical to that used in the pattern because the hue is rotated by the generator. This is a CSS hexadecimal color value, which defaults to `#933c3c`.
 
 - `options.generator` Determines the pattern. [All of the original patterns](https://github.com/jasonlong/geo_pattern#available-patterns) are available in this port, and their names are camelCased.
+
+- `options.scalePattern` Scale the pattern size by the value passed. This should be an int value.
 
 #### Pattern.color
 
