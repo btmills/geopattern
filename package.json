@@ -1,7 +1,10 @@
 {
   "name": "geopattern",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "Generate beautiful SVG patterns",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/@dougmorin"
+  },
   "keywords": [
     "svg",
     "pattern",
@@ -28,7 +31,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/btmills/geopattern"
+    "url": "http://btmills.github.io/geopattern/"
   },
   "dependencies": {
     "object-assign": "^4.1.0"
